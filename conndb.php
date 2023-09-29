@@ -11,7 +11,7 @@
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if($row = $result->fetch_assoc()){
+    while($row = $result->fetch_assoc()){
         echo $row['name'];
     }
 
