@@ -5,5 +5,14 @@
     $password = "65011212228@csmsu";
     $dbname = "web66_65011212228";
 
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    // echo "dwad";
+    $stmt = $conn->prepare("Select * From user");
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if($row = $result->fetch_assoc()){
+        echo $row['name'];
+    }
 
 ?>
