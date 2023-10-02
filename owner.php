@@ -28,6 +28,9 @@ include 'conndb.php';
                         <li>
                             <h1>Pizza Shop</h1>
                         </li>
+                        <li style="margin-left: 20%;" >
+                            <input type="search" name="search" style="border-radius: 50px;">
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -36,7 +39,7 @@ include 'conndb.php';
 
 
 
-    
+
 </body>
 
 </html>
