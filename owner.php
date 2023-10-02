@@ -1,5 +1,5 @@
 <?php
-include 'conndb.php';
+include 'dbconn.php';
 
 ?>
 <!DOCTYPE html>
