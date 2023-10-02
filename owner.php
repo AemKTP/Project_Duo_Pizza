@@ -31,17 +31,18 @@ include 'dbconn.php';
                             <li style="margin-right: 20px;">
                                 <a href="owner.php" style="text-decoration: none;">
                                     <img src="pizza.png" alt="logo" width="100px">
+                                    <li>
+                                        <h1>Pizza Shop</h1>
+                                    </li>
                                 </a>
-                            <li>
-                                <h1>Pizza Shop</h1>
-                            </li>
                             </li>
                             <li style="margin-left: 20%;">
                                 <input type="search" name="search" style="border-radius: 50px;">
                             </li>
                             <li style="margin-left: auto;">
-                                <a href="">
-                                    <img src="shoppingcart.png" alt="shoppingcart" width="70px" height="70px">
+                                <a href="" style="display: flex; align-items: center;">
+                                    <img src="shoppingcart.png" alt="shoppingcart" style="margin-top: 10%;" width="70px" height="70px">
+                                    <span style="font-size:60px;cursor:pointer" onclick="openNav()">&#9776;</span>
                                 </a>
                             </li>
                         </ul>
