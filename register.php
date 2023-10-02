@@ -1,6 +1,12 @@
 <?php
 include 'dbconn.php';
 
+
+$stmt = $conn->prepare("Select * from user");
+$stmt->execute();
+$result = $stmt->get_result();
+$result->fetch_assoc();
+
 ?>
 
 <!DOCTYPE html>
@@ -12,6 +18,9 @@ include 'dbconn.php';
     <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
+
     <style>
         body {
             background: red;
@@ -33,18 +42,22 @@ include 'dbconn.php';
             text-align: center;
         }
 
-        .img1 img {
-            height: 200px;
-            border-top-right-radius: 15px;
-            border-top-left-radius: 15px;
-            width: 100%;
-
-        }
-
         .center {
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        input {
+            background-color: lightgray;
+            width: 490px;
+            height: 40px;
+        }
+
+        .card {
+            height: auto;
+            border-radius: 20px;
+
         }
     </style>
 </head>
@@ -57,7 +70,7 @@ include 'dbconn.php';
                 <div class="card">
                     <div class="container">
                         <div style="margin-top: 2%; ">
-                            <a href="">
+                            <a href="login.php">
                                 <img src="arrow_back.png" alt="back" width="50px">
                             </a>
                         </div>
@@ -91,14 +104,17 @@ include 'dbconn.php';
                                     <label for="" name="picture">Picture | รูป</label><br>
                                     <input type="text" name="picture" style="border-radius: 50px; width: 100%;" required>
                                 </div>
-                                <div style="margin-block: 1%;">
+                                <div style="margin-block: 5%;">
                                     type
                                     <select name="type" id="" required>
-                                        <option value="1">customer</option>
-                                        <option value="2">Owner</option>
+                                        <?php
+                                        foreach ($enum_values as $value) {
+                                            echo "<option value='" . $value . "'>" . $value . "</option>";
+                                        }
+                                        ?>
                                     </select>
                                 </div>
-                                <div class="center" style="margin-block: 2%;">
+                                <div class="center" style="margin-bottom: 5%;">
                                     <input type="submit" value="Register" class="btn btn-success" style="border-radius: 50px;">
                                 </div>
                             </div>
