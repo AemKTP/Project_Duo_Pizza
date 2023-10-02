@@ -1,6 +1,0 @@
-nav {
-    background: red;
-    background: linear-gradient(50deg, rgba(255, 0, 0, 1) 0%, rgba(255, 144, 0, 1) 100%);
-    transition: background-color .5s ease;
-
-}
