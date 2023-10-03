@@ -23,24 +23,26 @@ include "dbconn.php";
     body {
         overflow-x: hidden;
     }
-    .card{
-    height: auto;
-    border-radius: 20px;}
-    .btn{
-    border-radius: 12px;
-    color: #fff;
-    cursor: pointer;
-    font-weight: 700;
-    width:  100px;
-    height: 44px;
-    line-height: 1em;
-    max-width: 100%;
-    outline: none;
-    padding: 10px;
-    text-align: center;
-    align-items: center;
+
+    .card {
+        height: auto;
+        border-radius: 20px;
     }
-    
+
+    .btn {
+        border-radius: 12px;
+        color: #fff;
+        cursor: pointer;
+        font-weight: 700;
+        width: 100px;
+        height: 44px;
+        line-height: 1em;
+        max-width: 100%;
+        outline: none;
+        padding: 10px;
+        text-align: center;
+        align-items: center;
+    }
 </style>
 
 
@@ -91,12 +93,14 @@ include "dbconn.php";
 
             while ($row = $result->fetch_assoc()) { ?>
                 <div class="col-3" style="margin-bottom:3%;">
-                    <div class="card" >
-                        <div class="row" >
+                    <div class="card">
+                        <div class="row">
                             <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
                             <img src="<?= $row['image_pizza'] ?>" alt="pizza-pic" style="width:100%;">
-                            <h4 style="margin-top:20px;text-align:center;" ><b>*ราคาเริ่มต้น <?= $row['pizza_price']?></b></h4>
-                            <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $row['pid'] ?>)"><h2>+เลือก</h2></button>
+                            <h4 style="margin-top:20px;text-align:center;"><b>*ราคาเริ่มต้น <?= $row['pizza_price'] ?></b></h4>
+                            <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $row['pid'] ?>)">
+                                <h2>+เลือก</h2>
+                            </button>
                             <h5></h5>
                         </div>
                     </div>
@@ -105,7 +109,7 @@ include "dbconn.php";
             } ?>
         </div>
     </div>
-    
+
     <script>
         function redirectToShowPage(pid) {
             window.location.href = 'show.php?pid=' + pid;
