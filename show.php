@@ -1,8 +1,13 @@
+<!-- ยังไม่มี uid -->
 <?php
 include "dbconn.php";
 
 $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
-
+$uid = isset($_GET['uid']) ? $_GET['id'] : null;
+$stmt = $conn->prepare("select * from user where uid = ?");
+$stmt->bind_param('i', $uid);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 <!doctype html>
 <html>
@@ -19,12 +24,19 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
 <nav>
     <?php
     include "nav.php";
+    $uid;
+
+
     ?>
 </nav>
 <style>
     html,
     body {
         overflow-x: hidden;
+    }
+
+    a:hover {
+        color: black;
     }
 
     .card {
@@ -93,23 +105,23 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                 $row = $result->fetch_assoc();
 
 
-               
+
                 $sizeStmt = $conn->prepare("SELECT name, price FROM size");
                 $sizeStmt->execute();
                 $sizeResult = $sizeStmt->get_result();
 
-                
+
                 $sizes = [];
                 while ($sizeRow = $sizeResult->fetch_assoc()) {
                     $sizes[] = $sizeRow;
                 }
 
-                
+
                 $crustStmt = $conn->prepare("SELECT name, price FROM crust");
                 $crustStmt->execute();
                 $crustResult = $crustStmt->get_result();
 
-                
+
                 $crust = [];
                 while ($crustRow = $crustResult->fetch_assoc()) {
                     $crust[] = $crustRow;
@@ -168,17 +180,17 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
 
     <script>
         function calculateTotalPrice() {
-            
+
             var selectedSizePrice = parseFloat(document.getElementById("cart").value);
             var selectedCrustPrice = parseFloat(document.getElementById("crust").value);
 
-            
+
             var pizzaPrice = parseFloat(<?= $row['pizza_price'] ?>);
 
-            
+
             var totalPrice = pizzaPrice + selectedSizePrice + selectedCrustPrice;
 
-            
+
             document.getElementById("totalPrice").innerText = totalPrice.toFixed(2);
         }
     </script>
