@@ -54,27 +54,41 @@ include 'dbconn.php';
     ?>
     <div class="container" style="margin-top: 5%;">
         <div class="row">
-            <div class="col-3">
-                <select class="form-select form-select-lg mb-3" name="type" style="margin-block: 2%;" onchange="this.form.submit()">
-                    <option value="">fanefl</option>
-                </select>
+            <div class="col">
+                <div class="col-3">
+
+                    <select class="form-select form-select-lg mb-3 " name="type" style="margin-block: 2%;" onchange="this.form.submit()">
+                        <option value="">fanefl</option>
+                    </select>
+                </div>
 
                 <?php while ($row = $result->fetch_assoc()) {
                 ?>
-                    <div class="card" style="margin-block: 2%; display: flex;">
-                        <div class="row">
-                            <div class="col" style="display: flex;">
-
+                    <div class="card">
+                        <div class="row justify-content-between">
+                            <div class="col grid grid-cols-3 gap-5">
                                 <div>
                                     <h5>Order : <?= $row['oid'] ?></h5>
                                 </div>
-
+                            </div>
+                            <div class="col grid grid-cols-3 gap-5">
                                 <div>
-                                    adwakajflk
+                                    <h5>Order : <?= $row['oid'] ?></h5>
+                                </div>
+                            </div>
+                            <div class="col grid grid-cols-3 gap-5">
+                                <div>
+                                    <h5>Order : <?= $row['oid'] ?></h5>
+                                </div>
+                            </div>
+                            <div class="col grid grid-cols-3 gap-5">
+                                <div>
+                                    <h5>Order : <?= $row['oid'] ?></h5>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 <?php } ?>
             </div>
         </div>
