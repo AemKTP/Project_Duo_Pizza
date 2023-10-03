@@ -92,6 +92,8 @@ select{
     overflow-x: hidden;
     transition: 0.8s;
     padding-top: 60px;
+    border: 2px solid black;
+    
 }
 
 .sidenav a {
@@ -101,6 +103,7 @@ select{
     color: black;
     display: block;
     transition: 0.3s;
+    
 }
 
 .sidenav a:hover {
