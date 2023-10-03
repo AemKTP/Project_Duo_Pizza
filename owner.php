@@ -31,10 +31,28 @@ include 'dbconn.php';
 
         .card {
             display: flex;
-            align-items: center;
+            align-items: auto;
             justify-content: center;
             height: 300px;
 
+        }
+
+        .card-image {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: center;
+            align-items: center;
+            text-align: center;
+
+        }
+
+        .card-image img {
+            width: auto;
+            height: auto;
+        }
+
+        .card-title {
+            text-align: auto;
         }
 
         .bgcolor {
@@ -66,27 +84,29 @@ include 'dbconn.php';
                 ?>
                     <div class="card">
                         <div class="row justify-content-between">
-                            <div class="col grid grid-cols-3 gap-5">
-                                <div class="">
-                                    <h5>Order : <?= $row['oid'] ?></h5>
+                            <div class="row center" style="margin-left: 2%; margin-right: 2%;">
+                                <div class="col grid grid-cols-3 gap-5">
+                                    <div class="">
+                                        <h6>Order : <?= $row['oid'] ?></h6>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col grid grid-cols-3 gap-5" style="display: flex;">
-                                <div>
-                                    <h5>User : <?= $row['uid'] ?></h5>
-                                    <h5>Name : <?= $row['name'] ?></h5>
-                                    <h5>Phone : <?= $row['phone'] ?></h5>
-                                    <h5>Email : <?= $row['email'] ?></h5>
+                                <div class="col grid grid-cols-3 gap-5" style="display: flex;">
+                                    <div>
+                                        <h6>User : <?= $row['uid'] ?></h6>
+                                        <h6>Name : <?= $row['name'] ?></h6>
+                                        <h6>Phone : <?= $row['phone'] ?></h6>
+                                        <h6>Email : <?= $row['email'] ?></h6>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col grid grid-cols-3 gap-5">
-                                <div>
-                                    <h5>Order : <?= $row['oid'] ?></h5>
+                                <div class="col grid grid-cols-3 gap-5">
+                                    <div>
+                                        <h6>address : <?= $row['oid'] ?></h6>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col grid grid-cols-3 gap-5">
-                                <div>
-                                    <h5>Order : <?= $row['oid'] ?></h5>
+                                <div class="col grid grid-cols-3 gap-5">
+                                    <div>
+                                        <h6>amount : <?= $row['oid'] ?></h6>
+                                    </div>
                                 </div>
                             </div>
                         </div>
