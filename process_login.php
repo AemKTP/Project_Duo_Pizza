@@ -31,14 +31,15 @@ while ($row = $result->fetch_assoc()){
         if (password_verify($password, $row['password'])) {
             if($type == $row['type']){
                 if($row['type'] == 'ลูกค้า'){
-                    header("Location: customer.php");
+
+                    header("Location: customer.php?uid=".$row['uid']);
                     ?>
                     
 
                 <?php
                 }
                 if($row['type'] == 'เจ้าของร้าน'){
-                    header("Location: owner.php");
+                    header("Location: owner.php?uid=".$row['uid']);
 
                      
                 }
