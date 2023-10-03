@@ -1,8 +1,10 @@
 <?php
 include 'dbconn.php';
 
-
-$stmt = $conn->prepare("select * from user");
+$uid = $_GET['uid'];
+// echo $uid;
+$stmt = $conn->prepare("select * from user where uid = ?");
+$stmt->bind_param('i', $uid);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
@@ -36,7 +38,6 @@ $result = $stmt->get_result();
             align-items: center;
             justify-content: center;
         }
-        
     </style>
 </head>
 
@@ -61,7 +62,7 @@ $result = $stmt->get_result();
                             <li style="margin-left: auto;">
                                 <a href="" style="display: flex; align-items: center;">
                                     <img src="shoppingcart.png" alt="shoppingcart" style="margin-top: 10%;" width="70px" height="70px">
-                            <li id="mySidenav" class="sidenav">
+                            <li id="mySidenav" class="sidenav" >
                                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 
                                 <?php $row = $result->fetch_assoc() ?>
@@ -72,6 +73,11 @@ $result = $stmt->get_result();
                                             <h2 class="center" style="margin-block: 5%;"><?= $row['name'] ?></h2>
                                             <h2 class="center" style="margin-block: 5%;"><?= $row['type'] ?></h2>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row" >
+                                    <div class="col center">
+                                        <a href="index.php" style="margin-top: 170%;">ออกจากระบบ</a>
                                     </div>
                                 </div>
 
