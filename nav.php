@@ -1,5 +1,10 @@
 <?php
 include 'dbconn.php';
+
+
+$stmt = $conn->prepare("select * from user");
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -51,14 +56,15 @@ include 'dbconn.php';
                                     <img src="shoppingcart.png" alt="shoppingcart" style="margin-top: 10%;" width="70px" height="70px">
                             <li id="mySidenav" class="sidenav">
                                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                                <?php
+                                if ($_POST['uid'] == $row['uid']) {
+                                    while ($row = $result->fetch_assoc()) { ?>
+                                        <img src="<?= $row['$picture'] ?>" alt="logomember">
 
-
-
-
-
-
-
-
+                                <?php
+                                    }
+                                }
+                                ?>
                             </li>
                             <span style="font-size:50px;cursor:pointer" onclick="openNav()">&#9776;</span>
                         </ul>
