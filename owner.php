@@ -19,7 +19,7 @@ include 'dbconn.php';
 
     <nav>
         <?php
-        include 'nav.php';
+        include 'nav_owner.php';
         ?>
     </nav>
     <style>
@@ -48,7 +48,7 @@ include 'dbconn.php';
 <body class="bgcolor">
 
     <?php
-    $stmt = $conn->prepare("SELECT * FROM `order` ");
+    $stmt = $conn->prepare("SELECT * FROM `order`, user where order.uid = user.uid ");
     $stmt->execute();
     $result = $stmt->get_result();
     ?>
@@ -58,7 +58,7 @@ include 'dbconn.php';
                 <div class="col-3">
 
                     <select class="form-select form-select-lg mb-3 " name="type" style="margin-block: 2%;" onchange="this.form.submit()">
-                        <option value="">fanefl</option>
+                        <option value="">เลือกทั้งหมด</option>
                     </select>
                 </div>
 
@@ -67,13 +67,16 @@ include 'dbconn.php';
                     <div class="card">
                         <div class="row justify-content-between">
                             <div class="col grid grid-cols-3 gap-5">
-                                <div>
+                                <div class="">
                                     <h5>Order : <?= $row['oid'] ?></h5>
                                 </div>
                             </div>
-                            <div class="col grid grid-cols-3 gap-5">
+                            <div class="col grid grid-cols-3 gap-5" style="display: flex;">
                                 <div>
-                                    <h5>Order : <?= $row['oid'] ?></h5>
+                                    <h5>User : <?= $row['uid'] ?></h5>
+                                    <h5>Name : <?= $row['name'] ?></h5>
+                                    <h5>Phone : <?= $row['phone'] ?></h5>
+                                    <h5>Email : <?= $row['email'] ?></h5>
                                 </div>
                             </div>
                             <div class="col grid grid-cols-3 gap-5">
