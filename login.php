@@ -32,6 +32,11 @@ $conn->close();
             <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-body">
+                        <div style="margin-top: 2%; ">
+                            <a href="index.php">
+                                <img src="arrow_back.png" alt="back" width="50px">
+                            </a>
+                        </div>
                         <div class="card-image"><img src="pizza.png" alt="pizza_icon"></div>
                         <h1 class="card-title"><b>Login</b></h1>
                         <form action="process_login.php" method="post">
@@ -54,16 +59,16 @@ $conn->close();
                             <a class="register" href="register.php"><b>(click here for register)</b></a>
                         </form>
                         <!-- <?php
-                        if (isset($_GET['error']) && $_GET['error'] == "รหัสผ่านไม่ถูกต้อง") {
-                            echo '<script>';
-                            echo 'alert("รหัสผ่านไม่ถูกต้อง");';
-                            echo '</script>';
-                        } elseif (isset($_GET['error']) && $_GET['error'] == "ไม่พบบัญชีผู้ใช้") {
-                            echo '<script>';
-                            echo 'alert("ไม่พบบัญชีผู้ใช้");';
-                            echo '</script>';
-                        }
-                        ?> -->
+                                if (isset($_GET['error']) && $_GET['error'] == "รหัสผ่านไม่ถูกต้อง") {
+                                    echo '<script>';
+                                    echo 'alert("รหัสผ่านไม่ถูกต้อง");';
+                                    echo '</script>';
+                                } elseif (isset($_GET['error']) && $_GET['error'] == "ไม่พบบัญชีผู้ใช้") {
+                                    echo '<script>';
+                                    echo 'alert("ไม่พบบัญชีผู้ใช้");';
+                                    echo '</script>';
+                                }
+                                ?> -->
                     </div>
                 </div>
             </div>
