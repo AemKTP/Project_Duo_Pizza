@@ -36,10 +36,10 @@ $conn->close();
                         <h1 class="card-title"><b>Login</b></h1>
                         <form action="process_login.php" method="post">
                             <label for="email">Email</label><br>
-                            <input type="email" id="email" name="email"><br>
+                            <input type="email" id="email" style="border-radius: 50px;" name="email"><br>
                             <label for="password">Password</label><br>
-                            <input type="password" id="password" name="password"><br><br>
-                            <label for="type">Type</label>
+                            <input type="password" id="password" style="border-radius: 50px;" name="password"><br><br>
+                            <label for="type" style="font-size: 18px;">Type</label>
                             <select name="type">
                                 <?php
                                 foreach ($enum_values as $value) {
@@ -47,13 +47,13 @@ $conn->close();
                                 }
                                 ?>
                             </select>
-                            <a class="forgetPass" href="changepassword.php">forget Password?</a>
+                            <a class="forgetPass" style="font-size: 18px;" href="changepassword.php">forget Password?</a>
                             <div class="center-button">
                                 <button type="submit" class="btn btn-primary">Login</button>
                             </div>
                             <a class="register" href="register.php"><b>(click here for register)</b></a>
                         </form>
-                        <?php
+                        <!-- <?php
                         if (isset($_GET['error']) && $_GET['error'] == "รหัสผ่านไม่ถูกต้อง") {
                             echo '<script>';
                             echo 'alert("รหัสผ่านไม่ถูกต้อง");';
@@ -63,7 +63,7 @@ $conn->close();
                             echo 'alert("ไม่พบบัญชีผู้ใช้");';
                             echo '</script>';
                         }
-                        ?>
+                        ?> -->
                     </div>
                 </div>
             </div>
