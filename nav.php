@@ -15,7 +15,7 @@ $result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner Shop</title>
+    <title>Nav</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="main.css">
@@ -49,7 +49,7 @@ $result = $stmt->get_result();
                     <div class="container" style="margin-block: 1%;">
                         <ul class="d-flex align-items-center list-unstyled ml-auto">
                             <li style="margin-right: 20px;">
-                                <a href="owner.php" style="text-decoration: none;">
+                                <a href="customer.php?uid=<?= $uid?>" style="text-decoration: none;">
                                     <img src="pizza.png" alt="logo" width="100px">
                             <li>
                                 <h1>Pizza Shop</h1>
