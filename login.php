@@ -24,7 +24,7 @@ $conn->close();
     <link rel="stylesheet" href="main.css">
     <title>Login Pizza</title>
 </head>
-<body>
+<body class="body">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6">
@@ -34,9 +34,9 @@ $conn->close();
                         <h1 class="card-title"><b>Login</b></h1>
                         <form action="process_login.php" method="post">
                             <label for="email">Email</label><br>
-                            <input type="text" id="email" name="email"><br>
+                            <input type="email" id="email" name="email"><br>
                             <label for="password">Password</label><br>
-                            <input type="text" id="password" name="password"><br><br>
+                            <input type="password" id="password" name="password"><br><br>
                             <label for="type">Type</label>
                             <select name="type">
                                 <?php
