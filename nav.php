@@ -30,6 +30,11 @@ $result = $stmt->get_result();
             width: 240px;
             height: 40px;
         }
+        .center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 
@@ -56,15 +61,21 @@ $result = $stmt->get_result();
                                     <img src="shoppingcart.png" alt="shoppingcart" style="margin-top: 10%;" width="70px" height="70px">
                             <li id="mySidenav" class="sidenav">
                                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                                <?php
-                                if ($_POST['uid'] == $row['uid']) {
-                                    while ($row = $result->fetch_assoc()) { ?>
-                                        <img src="<?= $row['$picture'] ?>" alt="logomember">
+
+                                <?php $row = $result->fetch_assoc() ?>
+                                <div class="center">
+                                    <img src="<?= $row['picture'] ?>" alt="logo" width="150px" height="150px" style=" border-radius: 100%; border: 2px solid black;">
+                                </div>
+
+                                <!-- <?php
+                                        if ($_POST['uid'] == $row['uid']) {
+                                            while ($row = $result->fetch_assoc()) { ?>
+                                        <img src="<?= $row['picture'] ?>" alt="logomember">
 
                                 <?php
-                                    }
-                                }
-                                ?>
+                                            }
+                                        }
+                                ?> -->
                             </li>
                             <span style="font-size:50px;cursor:pointer" onclick="openNav()">&#9776;</span>
                         </ul>
