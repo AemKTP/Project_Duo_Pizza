@@ -25,6 +25,9 @@ $result = $stmt->get_result();
             color: black;
             transition: color 0.3s;
         }
+        a:hover{
+            color: black;
+        }
 
         input {
             display: flex;
@@ -80,16 +83,6 @@ $result = $stmt->get_result();
                                         <a href="index.php" style="margin-top: 170%;">ออกจากระบบ</a>
                                     </div>
                                 </div>
-
-                                <!-- <?php
-                                        if ($_POST['uid'] == $row['uid']) {
-                                            while ($row = $result->fetch_assoc()) { ?>
-                                        <img src="<?= $row['picture'] ?>" alt="logomember">
-
-                                <?php
-                                            }
-                                        }
-                                ?> -->
                             </li>
                             <span style="font-size:50px;cursor:pointer" onclick="openNav()">&#9776;</span>
                         </ul>
