@@ -1,6 +1,5 @@
 <?php
 include 'dbconn.php';
-include 'nav.php';
 
 ?>
 
@@ -19,9 +18,17 @@ include 'nav.php';
 
     </style>
 </head>
+
 <body>
+    <nav>
+        <?php
+        include 'nav.php';
+        ?>
+    </nav>
+    <div class="body">
 
-
+        iawfwla
+    </div>
 
 </body>
 
