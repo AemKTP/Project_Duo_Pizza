@@ -30,16 +30,18 @@ $result = $stmt->get_result();
             width: 240px;
             height: 40px;
         }
+
         .center {
             display: flex;
             align-items: center;
             justify-content: center;
         }
+        
     </style>
 </head>
 
 <body>
-    <nav>
+    <nav style="background-color: white;">
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
@@ -64,7 +66,13 @@ $result = $stmt->get_result();
 
                                 <?php $row = $result->fetch_assoc() ?>
                                 <div class="center">
-                                    <img src="<?= $row['picture'] ?>" alt="logo" width="150px" height="150px" style=" border-radius: 100%; border: 2px solid black;">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img src="<?= $row['picture'] ?>" alt="logo" width="150px" height="150px" style=" border-radius: 100%; border: 2px solid black;">
+                                            <h2 class="center" style="margin-block: 5%;"><?= $row['name'] ?></h2>
+                                            <h2 class="center" style="margin-block: 5%;"><?= $row['type'] ?></h2>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- <?php
