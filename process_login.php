@@ -8,8 +8,8 @@ $password = $_POST['password'];
 $type = 'เจ้าของร้าน';
 
 
-print_r($_POST);
-echo $type;
+// print_r($_POST);
+// echo $type;
 
 // echo "Not Email"."<br>"; 
 ?>
@@ -43,7 +43,12 @@ while ($row = $result->fetch_assoc()){
 
     }
     else{
-        header("Location: login.php");
+
+        echo '<script type="text/javascript">';
+        echo 'alert("อีเมล หรือ รหัสผ่านไม่ถูกต้อง.");'; // Display an alert dialog
+        echo 'window.location.href = "login.php";'; // Redirect to another_page.php
+        echo '</script>';
+
     }
 }
     ?>
