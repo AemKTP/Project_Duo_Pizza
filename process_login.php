@@ -2,12 +2,14 @@
 include "dbconn.php";
 
 // รับค่า email และ password จากฟอร์ม
+
 $email = $_POST['email'];
 $password = $_POST['password'];
-$type = $_POST['type'];
+$type = 'เจ้าของร้าน';
 
 
-// print_r($_POST);
+print_r($_POST);
+echo $type;
 
 // echo "Not Email"."<br>"; 
 ?>
@@ -26,23 +28,15 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 while ($row = $result->fetch_assoc()){
+    // echo $row['name'];
 
     if($row['email'] == $email){
         if (password_verify($password, $row['password'])) {
-            if($type == $row['type']){
-                if($row['type'] == 'ลูกค้า'){
-
-                    header("Location: customer.php?uid=".$row['uid']);
-                    ?>
-                    
-
-                <?php
-                }
-                if($row['type'] == 'เจ้าของร้าน'){
-                    header("Location: owner.php?uid=".$row['uid']);
-
-                     
-                }
+            if($row['type']== $type){
+                header("Location: owner.php?uid=".$row['uid']);
+            }
+            else{
+                header("Location: customer.php?uid=".$row['uid']);
             }
         }
         break;
