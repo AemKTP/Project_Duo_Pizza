@@ -44,31 +44,28 @@ $conn->close();
                             <input type="email" id="email" style="border-radius: 50px;" name="email"><br>
                             <label for="password">Password</label><br>
                             <input type="password" id="password" style="border-radius: 50px;" name="password"><br><br>
-                            <label for="type" style="font-size: 18px;">Type</label>
+                            <!-- <label for="type" style="font-size: 18px;">Type</label>
                             <select name="type">
                                 <?php
                                 foreach ($enum_values as $value) {
                                     echo "<option value='" . $value . "'>" . $value . "</option>";
                                 }
                                 ?>
-                            </select>
-                            <a class="forgetPass" style="font-size: 18px;" href="changepassword.php">forget Password?</a>
-                            <div class="center-button">
-                                <button type="submit" class="btn btn-primary">Login</button>
+                            </select> -->
+                            <div class="row">
+                                <div class="col">
+                                    <a class="forgetPass" style="font-size: 18px; justify-content: right; margin-right: 2%;" href="changepassword.php">forget Password?</a>
+                                </div>
                             </div>
-                            <a class="register" href="register.php"><b>(click here for register)</b></a>
+                            <div class="row"> 
+                                <div class="col">
+                                    <div class="center-button">
+                                        <button type="submit" class="btn btn-primary">Login</button>
+                                    </div>
+                                    <a class="register" href="register.php"><b>(click here for register)</b></a>
+                                </div>
+                            </div>
                         </form>
-                        <!-- <?php
-                                if (isset($_GET['error']) && $_GET['error'] == "รหัสผ่านไม่ถูกต้อง") {
-                                    echo '<script>';
-                                    echo 'alert("รหัสผ่านไม่ถูกต้อง");';
-                                    echo '</script>';
-                                } elseif (isset($_GET['error']) && $_GET['error'] == "ไม่พบบัญชีผู้ใช้") {
-                                    echo '<script>';
-                                    echo 'alert("ไม่พบบัญชีผู้ใช้");';
-                                    echo '</script>';
-                                }
-                                ?> -->
                     </div>
                 </div>
             </div>
