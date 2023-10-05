@@ -32,6 +32,11 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
         background: linear-gradient(50deg, rgba(255, 0, 0, 1)0%, rgba(255, 144, 0, 1)110%);
         transition: background-color .5s ease;
     }
+    a {
+        text-decoration: none;
+        color: black;
+        transition: color 0.3s;
+    }
 
     a:hover {
         color: black;
@@ -56,7 +61,8 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
         text-align: center;
         align-items: center;
     }
-    .centercard{
+
+    .centercard {
         display: flex;
         height: 90vh;
         justify-content: center;
@@ -173,8 +179,9 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             </select>
                             <br><br>
                             <h1 style="margin-top:20px; margin-left:15rem;"><b><span id="totalPrice"><?= number_format($row['pizza_price'], 2) ?></span>บาท</b></h1>
-                            <button type="button" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem;">
-                                <h1> Add to cart</h1>
+                            <button type="button" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem;" onclick="location.href='cart.php'">
+                                    <h1> Add to cart</h1>
+
                             </button>
                         </form>
                     </div>
