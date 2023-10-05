@@ -61,7 +61,7 @@ $result = $stmt->get_result();
         text-align: center;
         align-items: center;
     }
-    .center{
+    .centercard{
         display: flex;
         height: 90vh;
         justify-content: center;
@@ -93,7 +93,7 @@ $result = $stmt->get_result();
 
 <body>
     <div class="container">
-        <div class="row justify-content-center center">
+        <div class="row justify-content-center centercard">
             <div class="col-6">
                 <?php
                 $stmt = $conn->prepare("SELECT
