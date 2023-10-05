@@ -5,7 +5,8 @@ include "dbconn.php";
 
 $email = $_POST['email'];
 $password = $_POST['password'];
-$type = 'เจ้าของร้าน';
+$type1 = 'เจ้าของร้าน';
+$type2 = 'ลูกค้า';
 
 
 // print_r($_POST);
@@ -32,12 +33,17 @@ while ($row = $result->fetch_assoc()){
 
     if($row['email'] == $email){
         if (password_verify($password, $row['password'])) {
-            if($row['type']== $type){
+            if($row['type']== $type1){
                 header("Location: owner.php?uid=".$row['uid']);
             }
-            else{
+            else if($row['type']== $type2){
                 header("Location: customer.php?uid=".$row['uid']);
             }
+            else{
+                header("Location: login.php");
+
+            }
+
         }
         break;
 
