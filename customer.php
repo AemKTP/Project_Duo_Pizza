@@ -104,7 +104,7 @@ $uid = $_GET['uid'];
                             <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
                             <img src="<?= $row['image_pizza'] ?>" alt="pizza-pic" style="width:100%;">
                             <h4 style="margin-top:20px;text-align:center;"><b>*ราคาเริ่มต้น <?= $row['pizza_price'] ?></b></h4>
-                            <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $row['pid'] ?>)">
+                            <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $uid?>, <?= $row['pid']?>)">
                                 <h2>+เลือก</h2>
                             </button>
                             <h5></h5>
@@ -116,8 +116,8 @@ $uid = $_GET['uid'];
         </div>
     </div>
     <script>
-        function redirectToShowPage(pid) {
-            window.location.href = 'show.php?pid=' + pid; // ใช้ & แทน ? ในการระบุพารามิเตอร์เพิ่มเติม
+        function redirectToShowPage(uid,pid) {
+            window.location.href = 'show.php?uid=' + uid + '&pid=' + pid; // ใช้ & แทน ? ในการระบุพารามิเตอร์เพิ่มเติม
         }
     </script>
 </body>
