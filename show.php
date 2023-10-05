@@ -33,6 +33,9 @@ $result = $stmt->get_result();
     html,
     body {
         overflow-x: hidden;
+        background: red;
+        background: linear-gradient(50deg, rgba(255, 0, 0, 1)0%, rgba(255, 144, 0, 1)110%);
+        transition: background-color .5s ease;
     }
 
     a:hover {
@@ -57,6 +60,13 @@ $result = $stmt->get_result();
         padding: 10px;
         text-align: center;
         align-items: center;
+    }
+    .center{
+        display: flex;
+        height: 90vh;
+        justify-content: center;
+        align-items: center;
+
     }
 
     /* สำหรับ dropdown */
@@ -83,7 +93,7 @@ $result = $stmt->get_result();
 
 <body>
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center center">
             <div class="col-6">
                 <?php
                 $stmt = $conn->prepare("SELECT
