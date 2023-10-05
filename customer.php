@@ -3,7 +3,6 @@ include "dbconn.php";
 
 $uid = $_GET['uid'];
 // echo $uid;
-
 ?>
 <!doctype html>
 <html>
