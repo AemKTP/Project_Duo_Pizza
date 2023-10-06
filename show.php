@@ -19,8 +19,8 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
 <nav>
     <?php
     include "nav.php";
-    $uid;
-
+    // echo $uid;
+    // $pid;
 
     ?>
 </nav>
@@ -32,6 +32,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
         background: linear-gradient(50deg, rgba(255, 0, 0, 1)0%, rgba(255, 144, 0, 1)110%);
         transition: background-color .5s ease;
     }
+
     a {
         text-decoration: none;
         color: black;
@@ -138,20 +139,20 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                     $crust[] = $crustRow;
                 }
 
-                
+
                 ?>
                 <div class="card">
                     <div class="row">
                         <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
                         <img src="<?= $row['image_pizza'] ?>" alt="pizza-pic" style="width:100%;">
-                        <form action="cart.php" method="get" style="margin-left:10rem;">
+                        <form action="cart.php?uid=<?= $uid ?>" method="post" style="margin-left:10rem;">
                             <label for="cart">
                                 <h3>เลือกไซต์:</h3>
                             </label>
-                            <select style="width:10rem;height:3rem;" name="cart" id="cart" onchange="calculateTotalPrice()">
+                            <select  style="width:10rem;height:3rem;" name="cart" id="cart" onchange="calculateTotalPrice()">
                                 <?php if (!empty($sizes)) {
                                     foreach ($sizes as $size) { ?>
-                                        <option value="<?= $size['price'] ?>"><?= $size['name'] ?></option>
+                                        <option  value="<?= $size['price'] ?>">  <?= $size['name'] ?></option>
                                 <?php }
                                 } ?>
                             </select>
@@ -179,9 +180,19 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             </select>
                             <br><br>
                             <h1 style="margin-top:20px; margin-left:15rem;"><b><span id="totalPrice"><?= number_format($row['pizza_price'], 2) ?></span>บาท</b></h1>
-                            <button type="button" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem;" onclick="location.href='cart.php?uid=<?= $uid?>'">
-                                    <h1> Add to cart</h1>
 
+                            <!-- Add hidden input fields to send data -->
+                            <input type="hidden" name="uid" value="<?= $uid ?>">
+                            <input type="hidden" name="pid" value="<?= $pid ?>">
+                            <input type="hidden" name="pizza_name" value="<?= $row['name_pizza'] ?>">
+                            <input type="hidden" name="pizza_image" value="<?= $row['image_pizza'] ?>">
+                            <input type="hidden" name="information" value="<?= $size['name'] .' , '. $crustOption['name'] ?>">
+                            <input type="hidden" name="pizza_price" value="<?= $row['pizza_price'] ?>">
+                            <input type="hidden" name="size_price" id="size_price" value="0">
+                            <input type="hidden" name="crust_price" id="crust_price" value="0">
+                            <input type="hidden" name="total_price" id="total_price" value="0"> <!-- Initialize total price to 0 -->
+                            <button type="submit" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem;">
+                                <h1> Add to cart</h1>
                             </button>
                         </form>
                     </div>
@@ -191,20 +202,20 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
     </div>
 
     <script>
+        
         function calculateTotalPrice() {
-
             var selectedSizePrice = parseFloat(document.getElementById("cart").value);
             var selectedCrustPrice = parseFloat(document.getElementById("crust").value);
-
-
+            
             var pizzaPrice = parseFloat(<?= $row['pizza_price'] ?>);
-
-
+            
             var totalPrice = pizzaPrice + selectedSizePrice + selectedCrustPrice;
-
-
+            
+            // Update the hidden input field for the total price
+            document.getElementById("total_price").value = totalPrice.toFixed(2);
+            
             document.getElementById("totalPrice").innerText = totalPrice.toFixed(2);
         }
+        calculateTotalPrice();
     </script>
-
 </body>
