@@ -138,13 +138,13 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                     $crust[] = $crustRow;
                 }
 
-
+                
                 ?>
                 <div class="card">
                     <div class="row">
                         <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
                         <img src="<?= $row['image_pizza'] ?>" alt="pizza-pic" style="width:100%;">
-                        <form action="/cart.php" method="post" style="margin-left:10rem;">
+                        <form action="cart.php" method="get" style="margin-left:10rem;">
                             <label for="cart">
                                 <h3>เลือกไซต์:</h3>
                             </label>
@@ -179,7 +179,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             </select>
                             <br><br>
                             <h1 style="margin-top:20px; margin-left:15rem;"><b><span id="totalPrice"><?= number_format($row['pizza_price'], 2) ?></span>บาท</b></h1>
-                            <button type="button" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem;" onclick="location.href='cart.php'">
+                            <button type="button" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem;" onclick="location.href='cart.php?uid=<?= $uid?>'">
                                     <h1> Add to cart</h1>
 
                             </button>
