@@ -101,7 +101,6 @@ include "dbconn.php";
                             <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $row['pid'] ?>)">
                                 <h2>+เลือก</h2>
                             </button>
-                            <h5></h5>
                         </div>
                     </div>
                 </div>
