@@ -3,7 +3,7 @@ include "dbconn.php";
 
 $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
 
-$stmt = $conn->prepare("Select * from")
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,11 +44,22 @@ $stmt = $conn->prepare("Select * from")
 </head>
 
 <body>
+<?php
+$stmt = $conn->prepare("SELECT pizza.name AS pizza_name, pizza.price AS pizza_price, pizza.image AS pizza_image, 
+                            crust.name AS crust_name, crust.price AS crust_price, 
+                            size.name AS size_name, size.price AS size_price
+                            FROM pizza
+                            JOIN size ON pizza.sid = size.sid
+                            JOIN crust ON pizza.cid = crust.cid");
+$stmt->execute();
+$result = $stmt->get_result();
+?>
+
     <div class="row centercard">
         <div class="col">
             <div class="container">
                 <div class="card">
-                    <div class="row" style="margin-left: 2%; margin-right: 2%;" >
+                    <div class="row" style="margin-left: 2%; margin-right: 2%;">
                         <div class="container" style="margin-block: 2%;">
                             <h1 style="text-decoration: underline;">รายการสั่งซื้อของท่าน</h1>
                         </div>
@@ -64,8 +75,13 @@ $stmt = $conn->prepare("Select * from")
                         </div>
                         <div class="row">
                             <div class="col" style="display: flex; justify-content:space-between;">
+                                <?php
+                                while ($row  = $result->fetch_assoc()) { ?>
+                                    <!-- <p><?= $row['pizza_name']. $row['crust_name']  ?></p> -->
 
-                                
+                                <?php }
+                                ?>
+
                             </div>
                         </div>
 
