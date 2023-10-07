@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\type;
+
 include "dbconn.php";
 
 // $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
@@ -15,13 +18,79 @@ include "dbconn.php";
     <nav>
 
         <?php
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+
+        echo intval($_GET['uid']);
+        if($_POST){
+            $pizza_image = $_POST['pizza_image'];
+            $pizza_name = $_POST['pizza_name'];
+            $information = $_POST['information'];
+            $pizza_price = intval($_POST['pizza_price']);
+            $quantity = $_POST['quantity'];
+    
+            $pid = intval($_POST['pid']);
+            $uid = intval($_POST['uid']);
+    
+    
+            if ($pid) {
+                $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, pizza.price as pizzaprice 
+                                from cart 
+                                INNER JOIN pizza ON cart.pid = pizza.pid 
+                                where cart.uid = ? and cart.pid = ?");
+                $stmt2->bind_param('ii', $uid, $pid);
+                $stmt2->execute();
+                $result2 = $stmt2->get_result();
+    
+                $Found = false;
+    
+                while ($row2 = $result2->fetch_assoc()) {
+                    $Found = true;
+                    
+                    $newAmount = $quantity + intval($row2['cartamount']);
+                    $newPrice = $newAmount * intval($row2['pizzaprice']);
+                    $cardId = intval($row2['cartid']);
+    
+                    $stmt = $conn->prepare("UPDATE cart SET price=?, amount=? WHERE cartid = ?");
+                    $stmt->bind_param('iii', $newPrice, $newAmount , $cardId);
+                    $stmt->execute();
+                }
+    
+                if (!$Found) {
+    
+    
+                    $address = "address";
+                    $statusna = '1';
+    
+                    $fdate = '2023-10-06 10:05:59';
+                    $odate = '2023-10-06 10:05:59';
+    
+                    $create_bid = $conn->prepare("INSERT INTO `order` (uid, total_price, adress, fdate, odate, status, pid) VALUES(?, 0, ?, ?, ?, ?, ?)");
+                    $create_bid->bind_param("issssi", $uid, $address, $fdate, $odate, $statusna, $pid);
+                    $create_bid->execute();
+                    // print_r($result);
+    
+    
+                    $cheack_stmt = $conn->prepare("SELECT * from `order` where uid = ? and pid = ?");
+                    $cheack_stmt->bind_param('ii', $uid, $pid);
+                    $cheack_stmt->execute();
+                    $resultoid = $cheack_stmt->get_result();
+                    $rowoid = $resultoid->fetch_assoc();
+                    echo $rowoid['oid'];
+    
+                    $create_crat = $conn->prepare("INSERT INTO cart (oid,uid,pid,price,amount) values (?,?,?,?,?)");
+                    $create_crat->bind_param("iiiii", $rowoid['oid'], $uid, $pid, $pizza_price, $quantity);
+                    $create_crat->execute();
+                }
+            }
+        }
+        
+
+
+
+
         // print_r($_POST);
         include "nav.php";
-        $pizza_image = $_POST['pizza_image'];
-        $pizza_name = $_POST['pizza_name'];
-        $information = $_POST['information'];
-        $pizza_price = $_POST['pizza_price'];
-        $quantity = $_POST['quantity'];
 
         ?>
     </nav>
@@ -90,7 +159,17 @@ include "dbconn.php";
                         <div class="row">
                             <?php $row  = $result->fetch_assoc(); ?>
                             <div class="col" style="display: flex; justify-content:space-between;">
-                                <div class="col-3" style="display: flex; justify-content: center;">
+                                <?php
+                                $newuid = intval($_GET['uid']) or intval($_POST['uid']);
+                                $stmt2 = $conn->prepare("Select * from cart where uid = ?");
+                                $stmt2->bind_param('i', $newuid);
+                                $stmt2->execute();
+                                $result2 = $stmt2->get_result();
+                                while ($row2 = $result2->fetch_assoc()) {
+                                    echo $row2['amount'];
+                                }
+                                ?>
+                                <!-- <div class="col-3" style="display: flex; justify-content: center;">
                                     <img src="<?= $pizza_image ?>" alt="photo" width="200px">
                                 </div>
                                 <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
@@ -107,7 +186,7 @@ include "dbconn.php";
                                 </div>
                                 <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
                                     <p> check </p>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
 
