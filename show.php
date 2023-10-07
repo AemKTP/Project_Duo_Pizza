@@ -20,7 +20,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
     <?php
     include "nav.php";
     // echo $uid;
-    // $pid;
+    //$pid;
 
     ?>
 </nav>
@@ -139,13 +139,12 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                     $crust[] = $crustRow;
                 }
 
-
                 ?>
                 <div class="card">
                     <div class="row">
                         <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
                         <img src="<?= $row['image_pizza'] ?>" alt="pizza-pic" style="width:100%;">
-                        <form action="cart.php?uid=<?= $uid ?>" method="post" style="margin-left:10rem;">
+                        <form action="cart.php?uid=<?= $uid?>" method="post" style="margin-left:10rem;">
                             <label for="cart">
                                 <h3>เลือกไซต์:</h3>
                             </label>
@@ -202,6 +201,8 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
     </div>
 
     <script>
+
+        
         
         function calculateTotalPrice() {
             var selectedSizePrice = parseFloat(document.getElementById("cart").value);
