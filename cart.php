@@ -4,6 +4,13 @@ use function PHPSTORM_META\type;
 
 include "dbconn.php";
 
+$get = $_POST['add'];
+$uid = $_POST['uid'];
+if (isset($_POST['add'])) {
+
+    header("location: cart.php?uid=" . $uid);
+}
+
 // $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
 
 ?>
@@ -111,6 +118,19 @@ include "dbconn.php";
             align-items: center;
 
         }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="checkbox"] {
+            margin-left: -0.5em;
+        }
+
+        .table-wrapper {
+            overflow-y: scroll;
+        }
     </style>
 </head>
 
@@ -119,14 +139,14 @@ include "dbconn.php";
     <div class="row centercard">
         <div class="col">
             <div class="container">
-                <div class="card">
+                <div class="card" style="overflow-y: scroll;">
                     <div class="row" style="margin-left: 2%; margin-right: 2%;">
                         <div class="container" style="margin-block: 2%;">
                             <h1 style="text-decoration: underline;">รายการสั่งซื้อของท่าน</h1>
                         </div>
 
-                        <div class="row" style="display: flex; justify-content: center; align-items: center;">
-                            <div class="col-3" style="display: flex; justify-content: center;">
+                        <div class="row">
+                            <div class="col-2" style="display: flex; justify-content: center;">
                                 <h3>Picture</h3>
                             </div>
                             <div class="col-2" style="display: flex; justify-content: center;">
@@ -138,20 +158,18 @@ include "dbconn.php";
                             <div class="col-1" style="display: flex; justify-content: center;">
                                 <h3>ราคา</h3>
                             </div>
-                            <div class="col-1" style="display: flex; justify-content: center;">
+                            <div class="col-3" style="display: flex; justify-content: center;">
                                 <h3>จำนวน</h3>
                             </div>
                             <div class="col-2" style="display: flex; justify-content: center;">
-                                <h3>CheckBlock</h3>
-                            </div>
-                            <div class="col-1" style="display: flex; justify-content: center;">
                                 <h3>Delete</h3>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: flex; justify-content: center; align-items: center; ">
+
                             <?php $row  = $result->fetch_assoc(); ?>
-                            <div class="col" style="display: flex; justify-content:space-between;">
-                                <div class="row">
+                            <form action="deletecart.php">
+                                <div class="row" style="display: flex; justify-content: center; align-items: center; ">
                                     <?php
                                     $newuid = intval($_GET['uid']) or intval($_POST['uid']);
                                     $stmt2 = $conn->prepare("Select * from cart where uid = ?");
@@ -170,41 +188,44 @@ include "dbconn.php";
                                     $stmt2->execute();
                                     $result2 = $stmt2->get_result();
                                     while ($row2 = $result2->fetch_assoc()) { ?>
+                                        <div class="row" style="border: 2px solid black; margin-top: 1%;">
 
-                                        <div class="col-3" style="display: flex; justify-content: center;">
-                                            <img src="<?= $row2['pizzaimage']; ?>" alt="photo" width="200px" height="130px">
-                                        </div>
-                                        <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                            <p> <?= $row2['pizzaname']; ?> </p>
-                                        </div>
-                                        <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                            <p> <?= $row2['crustname'] . "," . $row2['sizename'] ?> </p>
-                                        </div>
-                                        <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
-                                            <p> <?= $row2['pizzaprice']; ?> </p>
-                                        </div>
-                                        <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
-                                            <p> <?= $row2['cartamount']; ?> </p>
-                                        </div>
-                                        <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                            <p> check</p>
-                                        </div>
-                                        <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
-                                            <button type="button" class="btn btn-danger">Delete</button>
+                                            <div class="col-2" style="display: flex; justify-content: center; ">
+                                                <img src="<?= $row2['pizzaimage']; ?>" alt="photo" width="200px" height="130px">
+                                            </div>
+                                            <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
+                                                <h5> <?= $row2['pizzaname']; ?> </h5>
+                                            </div>
+                                            <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
+                                                <p> <?= $row2['crustname'] . " , " . $row2['sizename'] ?> </p>
+                                            </div>
+                                            <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
+                                                <h5 data-price="<?= $row2['pizzaprice']; ?>" id="price<?= $row2['cartid']; ?>">
+                                                    <?= number_format($row2['pizzaprice']) ?>
+                                                </h5>
+                                            </div>
+                                            <div class="col-2" style="display: flex; align-items: center; margin-left: 6rem; ">
+                                                <button type="button" class="btn btn-danger" style="margin-right: 8" onclick="">-
+                                            </button>
+                                                <p id="quantity<?= $row2['cartid']; ?>"> <?= $row2['cartamount']; ?> </p>
+                                                <button type="button" class="btn btn-success" style="margin-left: 8%;"> + </button>
+                                            </div>
+                                            <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </div>
                                         </div>
                                     <?php
                                     }
                                     ?>
-                                </div>
-                            </div>
+                            </form>
                         </div>
-
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+    </div>
 
 </body>
-
 </html>
