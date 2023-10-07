@@ -181,6 +181,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             <h1 style="margin-top:20px; margin-left:15rem;"><b><span id="totalPrice"><?= number_format($row['pizza_price'], 2) ?></span>บาท</b></h1>
 
                             <!-- Add hidden input fields to send data -->
+                            <input type="hidden" name="add" value="1">
                             <input type="hidden" name="uid" value="<?= $uid ?>">
                             <input type="hidden" name="pid" value="<?= $pid ?>">
                             <input type="hidden" name="pizza_name" value="<?= $row['name_pizza'] ?>">
@@ -189,7 +190,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             <input type="hidden" name="pizza_price" value="<?= $row['pizza_price'] ?>">
                             <input type="hidden" name="size_price" id="size_price" value="0">
                             <input type="hidden" name="crust_price" id="crust_price" value="0">
-                            <input type="hidden" name="total_price" id="total_price" value="0"> <!-- Initialize total price to 0 -->
+                            <input type="hidden" name="total_price" id="total_price" value="0"> 
                             <button type="submit" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem;">
                                 <h1> Add to cart</h1>
                             </button>
@@ -212,7 +213,6 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
             
             var totalPrice = pizzaPrice + selectedSizePrice + selectedCrustPrice;
             
-            // Update the hidden input field for the total price
             document.getElementById("total_price").value = totalPrice.toFixed(2);
             
             document.getElementById("totalPrice").innerText = totalPrice.toFixed(2);
