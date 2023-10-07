@@ -13,6 +13,9 @@ include "dbconn.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="main.css">
     <title>Cart</title>
 
     <nav>
@@ -156,27 +159,26 @@ include "dbconn.php";
                                     $stmt2->execute();
                                     $result2 = $stmt2->get_result();
 
-                                    $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, pizza.price as pizzaprice, pizza.name as pizzaname, pizza.image as pizzaimage
+                                    $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, cart.price as pizzaprice, pizza.name as pizzaname, pizza.image as pizzaimage
                                                             , crust.name as crustname, size.name as sizename
                                                             from cart 
                                                             INNER JOIN pizza ON cart.pid  = pizza.pid 
                                                             INNER JOIN crust ON pizza.cid = crust.cid
                                                             INNER JOIN size ON pizza.sid = size.sid
-                                                            where cart.uid = ?");
+                                                            where cart.uid = ? ");
                                     $stmt2->bind_param('i', $uid);
                                     $stmt2->execute();
                                     $result2 = $stmt2->get_result();
-
-
                                     while ($row2 = $result2->fetch_assoc()) { ?>
+
                                         <div class="col-3" style="display: flex; justify-content: center;">
-                                            <img src="<?= $row2['pizzaimage']; ?>" alt="photo" width="200px">
+                                            <img src="<?= $row2['pizzaimage']; ?>" alt="photo" width="200px" height="130px">
                                         </div>
                                         <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
                                             <p> <?= $row2['pizzaname']; ?> </p>
                                         </div>
                                         <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                            <p> <?= $row2['crustname'] .",". $row2['sizename'] ?> </p>
+                                            <p> <?= $row2['crustname'] . "," . $row2['sizename'] ?> </p>
                                         </div>
                                         <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
                                             <p> <?= $row2['pizzaprice']; ?> </p>
@@ -188,7 +190,7 @@ include "dbconn.php";
                                             <p> check</p>
                                         </div>
                                         <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
-                                            <p>Delete</p>
+                                            <button type="button" class="btn btn-danger">Delete</button>
                                         </div>
                                     <?php
                                     }
