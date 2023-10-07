@@ -63,7 +63,7 @@ $result = $stmt->get_result();
                                 <input type="search" name="search" placeholder="Search" style=" border-radius: 50px; background-color: lightgray;">
                             </li>
                             <li style="margin-left: auto;">
-                                <a href="" style="display: flex; align-items: center;">
+                                <a href="cart.php?uid=<?= $uid?>" style="display: flex; align-items: center;">
                                     <img src="shoppingcart.png" alt="shoppingcart" style="margin-top: 10%;" width="70px" height="70px">
                             <li id="mySidenav" class="sidenav" >
                                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
