@@ -45,7 +45,6 @@ if (isset($_POST['add'])) {
             $pid = intval($_POST['pid']);
             $uid = intval($_POST['uid']);
 
-
             if ($pid) {
                 $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, pizza.price as pizzaprice, pizza.name as pizzaname 
                                 from cart 
@@ -168,7 +167,7 @@ if (isset($_POST['add'])) {
 
 <body>
 
-    <div class="row centercard">
+    <div class="row centercard" style="margin-top: 3%;">
         <div class="col">
             <div class="container">
                 <div class="card" style="overflow-y: scroll;">
@@ -197,64 +196,71 @@ if (isset($_POST['add'])) {
                                 <h3>Delete</h3>
                             </div>
                         </div>
-                        <form action="deletecart.php" method="post" class="delete-form">
+                        <div class="row" style="display: flex; justify-content: center; align-items: center; ">
+
+                            <?php $row  = $result->fetch_assoc(); ?>
+
                             <div class="row" style="display: flex; justify-content: center; align-items: center; ">
+                                <?php
+                                $newuid = intval($_GET['uid']) or intval($_POST['uid']);
+                                $stmt2 = $conn->prepare("Select * from cart where uid = ?");
+                                $stmt2->bind_param('i', $newuid);
+                                $stmt2->execute();
+                                $result2 = $stmt2->get_result();
 
-                                <?php $row  = $result->fetch_assoc(); ?>
-
-                                <div class="row" style="display: flex; justify-content: center; align-items: center; ">
-                                    <?php
-                                    $newuid = intval($_GET['uid']) or intval($_POST['uid']);
-                                    $stmt2 = $conn->prepare("Select * from cart where uid = ?");
-                                    $stmt2->bind_param('i', $newuid);
-                                    $stmt2->execute();
-                                    $result2 = $stmt2->get_result();
-
-                                    $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, cart.price as pizzaprice, pizza.name as pizzaname, pizza.image as pizzaimage
+                                $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, cart.price as pizzaprice, pizza.name as pizzaname, pizza.image as pizzaimage
                                                             , crust.name as crustname, size.name as sizename
                                                             from cart 
                                                             INNER JOIN pizza ON cart.pid  = pizza.pid 
                                                             INNER JOIN crust ON pizza.cid = crust.cid
                                                             INNER JOIN size ON pizza.sid = size.sid
                                                             where cart.uid = ? ");
-                                    $stmt2->bind_param('i', $uid);
-                                    $stmt2->execute();
-                                    $result2 = $stmt2->get_result();
-                                    while ($row2 = $result2->fetch_assoc()) { ?>
-                                        <div class="row" style="border: 2px solid black; margin-top: 1%;">
+                                $stmt2->bind_param('i', $uid);
+                                $stmt2->execute();
+                                $result2 = $stmt2->get_result();
+                                while ($row2 = $result2->fetch_assoc()) { ?>
+                                    <div class="row" style="border: 2px solid black; margin-top: 1%;">
 
-                                            <div class="col-2" style="display: flex; justify-content: center; ">
-                                                <img src="<?= $row2['pizzaimage']; ?>" alt="photo" width="200px" height="130px">
-                                            </div>
-                                            <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                                <h5> <?= $row2['pizzaname']; ?> </h5>
-                                            </div>
-                                            <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                                <h6> <?= $row2['crustname'] . " , " . $row2['sizename'] ?> </h6>
-                                            </div>
-                                            <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
-                                                <h5 data-price="<?= $row2['pizzaprice']; ?>" id="price<?= $row2['cartid']; ?>">
-                                                    <?= number_format($row2['pizzaprice'], 2) ?>
-                                                </h5>
-                                            </div>
-                                            <div class="col-2" style="display: flex; align-items: center; margin-left: 6rem; ">
-                                                <button type="button" class="btn btn-danger" style="margin-right: 8%" onclick="processsum(<?= $row2['cartid'] ?>)">-</button>
-                                                <h6 id="quantity<?= $row2['cartid']; ?>"> <?= $row2['cartamount']; ?> </h6>
-                                                <button type="button" class="btn btn-success" style="margin-left: 8%;" onclick="processdiv(<?= $row2['cartid'] ?>)"> + </button>
-                                            </div>
-                                            <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
-
+                                        <div class="col-2" style="display: flex; justify-content: center; ">
+                                            <img src="<?= $row2['pizzaimage']; ?>" alt="photo" width="200px" height="130px">
+                                        </div>
+                                        <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
+                                            <h5> <?= $row2['pizzaname']; ?> </h5>
+                                        </div>
+                                        <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
+                                            <h6> <?= $row2['crustname'] . " , " . $row2['sizename'] ?> </h6>
+                                        </div>
+                                        <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
+                                            <h5 data-price="<?= $row2['pizzaprice']; ?>" id="price<?= $row2['cartid']; ?>">
+                                                <?= number_format($row2['pizzaprice'], 2) ?>
+                                            </h5>
+                                        </div>
+                                        <div class="col-2" style="display: flex; align-items: center; margin-left: 6rem; ">
+                                            <form action="upanddown.php?uid=<?= $uid ?>" method="post" style="margin-right: 8%">
+                                                <input type="hidden" name="process" id="process" value="-1">
+                                                <input type="hidden" name="cartid" id="cartid" value="<?= $row2['cartid'] ?>">
+                                                <button type="submit" class="btn btn-danger" >-</button>
+                                            </form>
+                                            <h6 id="quantity<?= $row2['cartid'] ?>"> <?= $row2['cartamount']; ?> </h6>
+                                            <form action="upanddown.php?uid=<?= $uid ?>" method="post" style="margin-left: 8%;">
+                                                <input type="hidden" name="process" id="process" value="1">
+                                                <input type="hidden" name="cartid" id="cartid" value="<?= $row2['cartid'] ?>">
+                                                <button type="submit" class="btn btn-success" > + </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
+                                            <form action="deletecart.php" method="post" class="delete-form">
                                                 <input type="hidden" name="uid" value="<?= $uid ?>">
                                                 <input type="hidden" name="cartid" value="<?= $row2['cartid'] ?>">
                                                 <button type="submit" class="btn btn-danger" value="">Delete</button>
-                                            </div>
+                                            </form>
                                         </div>
-                                    <?php
-                                    }
-                                    ?>
-                                </div>
+                                    </div>
+                                <?php
+                                }
+                                ?>
                             </div>
-                        </form>
+                        </div>
 
                     </div>
                 </div>
@@ -293,7 +299,7 @@ if (isset($_POST['add'])) {
     });
 </script>
 
-<script>
+<!-- <script>
     function processsum(cartId) {
         const quantityElement = document.getElementById(`quantity${cartId}`);
         let quantity = parseInt(quantityElement.innerText);
@@ -360,6 +366,6 @@ if (isset($_POST['add'])) {
         xhr.send(data);
     }
 </script>
-processsum
+processsum -->
 
 </html>
