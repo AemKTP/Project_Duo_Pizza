@@ -14,6 +14,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
     <title>pizzaShow</title>
 </head>
 <nav>
@@ -144,14 +145,14 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                     <div class="row">
                         <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
                         <img src="<?= $row['image_pizza'] ?>" alt="pizza-pic" style="width:100%;">
-                        <form action="cart.php?uid=<?= $uid?>" method="post" style="margin-left:10rem;">
+                        <form action="cart.php?uid=<?= $uid ?>" method="post" style="margin-left:10rem;">
                             <label for="cart">
                                 <h3>เลือกไซต์:</h3>
                             </label>
-                            <select  style="width:10rem;height:3rem;" name="cart" id="cart" onchange="calculateTotalPrice()">
+                            <select style="width:10rem;height:3rem;" name="cart" id="cart" onchange="calculateTotalPrice()">
                                 <?php if (!empty($sizes)) {
                                     foreach ($sizes as $size) { ?>
-                                        <option  value="<?= $size['price'] ?>">  <?= $size['name'] ?></option>
+                                        <option value="<?= $size['price'] ?>"> <?= $size['name'] ?></option>
                                 <?php }
                                 } ?>
                             </select>
@@ -186,12 +187,12 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             <input type="hidden" name="pid" value="<?= $pid ?>">
                             <input type="hidden" name="pizza_name" value="<?= $row['name_pizza'] ?>">
                             <input type="hidden" name="pizza_image" value="<?= $row['image_pizza'] ?>">
-                            <input type="hidden" name="information" value="<?= $size['name'] .' , '. $crustOption['name'] ?>">
+                            <input type="hidden" name="information" value="<?= $size['name'] . ' , ' . $crustOption['name'] ?>">
                             <input type="hidden" name="pizza_price" value="<?= $row['pizza_price'] ?>">
                             <input type="hidden" name="size_price" id="size_price" value="0">
                             <input type="hidden" name="crust_price" id="crust_price" value="0">
-                            <input type="hidden" name="total_price" id="total_price" value="0"> 
-                            <button type="submit" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem;">
+                            <input type="hidden" name="total_price" id="total_price" value="0">
+                            <button type="submit" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem; " >
                                 <h1> Add to cart</h1>
                             </button>
                         </form>
@@ -201,20 +202,21 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
-        
-        
+
+
         function calculateTotalPrice() {
             var selectedSizePrice = parseFloat(document.getElementById("cart").value);
             var selectedCrustPrice = parseFloat(document.getElementById("crust").value);
-            
+
             var pizzaPrice = parseFloat(<?= $row['pizza_price'] ?>);
-            
+
             var totalPrice = pizzaPrice + selectedSizePrice + selectedCrustPrice;
-            
+
             document.getElementById("total_price").value = totalPrice.toFixed(2);
-            
+
             document.getElementById("totalPrice").innerText = totalPrice.toFixed(2);
         }
         calculateTotalPrice();
