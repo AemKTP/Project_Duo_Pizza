@@ -192,7 +192,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             <input type="hidden" name="size_price" id="size_price" value="0">
                             <input type="hidden" name="crust_price" id="crust_price" value="0">
                             <input type="hidden" name="total_price" id="total_price" value="0">
-                            <button type="submit" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem; " >
+                            <button type="submit" class="btn btn-success" style="margin-top:10px;margin-bottom:30px; margin-left: 12rem; ">
                                 <h1> Add to cart</h1>
                             </button>
                         </form>
@@ -203,10 +203,8 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-
-
-
         function calculateTotalPrice() {
             var selectedSizePrice = parseFloat(document.getElementById("cart").value);
             var selectedCrustPrice = parseFloat(document.getElementById("crust").value);
