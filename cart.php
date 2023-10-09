@@ -237,6 +237,7 @@ if (isset($_POST['add'])) {
                                         </div>
                                         <div class="col-2" style="display: flex; align-items: center; margin-left: 6rem; ">
                                             <form action="upanddown.php?uid=<?= $uid ?>" method="post" style="margin-right: 8%">
+                                                <input type="hidden" name="lock" id="lock" value="1">
                                                 <input type="hidden" name="process" id="process" value="-1">
                                                 <input type="hidden" name="cartid" id="cartid" value="<?= $row2['cartid'] ?>">
                                                 <button type="submit" class="btn btn-danger" >-</button>
