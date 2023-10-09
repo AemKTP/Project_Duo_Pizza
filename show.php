@@ -64,12 +64,38 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
         align-items: center;
     }
 
+    .btn1 {
+        border-radius: 20px;
+        color: #fff;
+        cursor: pointer;
+        font-weight: 700;
+        width: 10rem;
+        height: 5rem;
+        line-height: 1em;
+        max-width: 100%;
+        outline: none;
+        padding: 10px;
+        text-align: center;
+        align-items: center;
+    }
+
     .centercard {
         display: flex;
         height: 90vh;
         justify-content: center;
         align-items: center;
 
+    }
+
+    .input {
+        background-color: lightgray;
+        width: 90px;
+        height: 50px;
+    }
+
+    .input[type="text"] {
+        border-color: lightgray;
+        border-radius: 10px;
     }
 
     /* สำหรับ dropdown */
@@ -170,15 +196,24 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             </select>
                             <br><br>
 
-                            <label for="quantity">
-                                <h3>จำนวน:</h3>
-                            </label>
-                            <select style="width:10rem;height:3rem;" name="quantity" id="quantity" onchange="calculateTotalPrice()">
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
-                                    <option value="<?= $i ?>"><?= $i ?> ชิ้น</option>
-                                <?php } ?>
-                            </select>
+                            <div class="col-8" style="display: flex; justify-content: space-between;">
+                                <label for="quantity" style="display: flex; justify-content: center; align-items: center;">
+                                    <h3>จำนวน:</h3>
+                                </label>
+                                <span >
+                                    <button type="button" class="btn1 btn-danger btn-number" data-type="minus" data-field="quantity">
+                                        <span class="glyphicon glyphicon-minus"></span>
+                                    </button>
+                                </span>
+                                <input class="input" type="text" name="quantity" value="1" min="1" max="500" id="quantity" style="font-size: 20px; ">
+                                <span>
+                                    <button type="button" class="btn1 btn-success btn-number" data-type="plus" data-field="quantity">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
                             <br><br>
+
                             <h1 style="margin-top:20px; margin-left:15rem;"><b><span id="totalPrice"><?= number_format($row['pizza_price'], 2) ?></span>บาท</b></h1>
 
                             <!-- Add hidden input fields to send data -->
@@ -203,6 +238,41 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    $(document).ready(function() {
+        $('.btn-number').click(function(e) {
+            e.preventDefault();
+
+            var fieldName = $(this).attr('data-field');
+            var type = $(this).attr('data-type');
+            var input = $("input[name='" + fieldName + "']");
+            var currentVal = parseInt(input.val());
+
+            if (!isNaN(currentVal)) {
+                if (type == 'minus') {
+                    if (currentVal > input.attr('min')) {
+                        input.val(currentVal - 1).change();
+                    }
+                    if (parseInt(input.val()) == input.attr('min')) {
+                        $(this).attr('disabled', true);
+                    }
+                } else if (type == 'plus') {
+                    if (currentVal < input.attr('max')) {
+                        input.val(currentVal + 1).change();
+                    }
+                    if (parseInt(input.val()) == input.attr('max')) {
+                        $(this).attr('disabled', true);
+                    }
+                }
+            } else {
+                input.val(1);
+            }
+
+            // เพิ่มส่วนนี้เพื่อเปิดการใช้งานปุ่มที่ถูกปิดไว้
+            $(".btn-number").removeAttr('disabled');
+        });
+    });
+</script>
 
     <script>
         function calculateTotalPrice() {
