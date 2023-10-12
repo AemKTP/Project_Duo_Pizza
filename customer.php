@@ -90,7 +90,8 @@ $uid = $_GET['uid'];
     <div class="container">
         <div class="row">
             <?php
-            $stmt = $conn->prepare("SELECT pid,pizza.name as name_pizza , pizza.image as image_pizza, pizza.price as pizza_price from pizza , size ,crust where pizza.sid=size.sid  and pizza.cid=crust.cid ");
+            $stmt = $conn->prepare("SELECT *
+                                    from pizza");
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -100,9 +101,9 @@ $uid = $_GET['uid'];
                 <div class="col-3" style="margin-bottom:3%;">
                     <div class="card">
                         <div class="row">
-                            <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
-                            <img src="<?= $row['image_pizza'] ?>" alt="pizza-pic" style="width:100%;">
-                            <h4 style="margin-top:20px;text-align:center;"><b>*ราคาเริ่มต้น <?= $row['pizza_price'] ?></b></h4>
+                            <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name'] ?></b></h1>
+                            <img src="<?= $row['image'] ?>" alt="pizza-pic" style="width:100%;">
+                            <h4 style="margin-top:20px;text-align:center;"><b>ราคาเริ่มต้น <?= $row['price'] ?></b></h4>
                             <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $uid?>, <?= $row['pid']?>)">
                                 <h2>+เลือก</h2>
                             </button>
