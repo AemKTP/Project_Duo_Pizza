@@ -98,13 +98,13 @@ if (isset($_POST['add'])) {
                     $newPrice = $newAmount * $pizza_price; // คำนวณราคารวมใหม่ตามจำนวนชิ้นใหม่
 
                     $address = "address";
-                    $statusna = '1';
+                    $statuspizza = '1';
 
                     $fdate = '2023-10-06 10:05:59';
                     $odate = '2023-10-06 10:05:59';
 
                     $create_bid = $conn->prepare("INSERT INTO `order` (uid, total_price, adress, fdate, odate, status, pid) VALUES(?, 0, ?, ?, ?, ?, ?)");
-                    $create_bid->bind_param("issssi", $uid, $address, $fdate, $odate, $statusna, $pid);
+                    $create_bid->bind_param("issssi", $uid, $address, $fdate, $odate, $statuspizza, $pid);
                     $create_bid->execute();
 
                     $cheack_stmt = $conn->prepare("SELECT * from `order` where uid = ? and pid = ?");
@@ -266,7 +266,7 @@ if (isset($_POST['add'])) {
                     </div>
                 </div>
                 <div class="card">
-                    dalkw
+                    ยังไม่ทำ
                 </div>
             </div>
         </div>
@@ -300,73 +300,6 @@ if (isset($_POST['add'])) {
     });
 </script>
 
-<!-- <script>
-    function processsum(cartId) {
-        const quantityElement = document.getElementById(`quantity${cartId}`);
-        let quantity = parseInt(quantityElement.innerText);
 
-        if (quantity > 1) {
-            quantity--;
-            quantityElement.innerText = quantity;
-            // อัปเดตราคาใน DOM หลังจากลดจำนวน
-            updateTotalPrice(cartId, quantity);
-            // ส่งข้อมูลการอัปเดตไปยังเซิร์ฟเวอร์และอัปเดตฐานข้อมูล
-            updateDatabase(cartId, -1); // -1 แสดงถึงการลดจำนวน
-        }
-    }
-
-
-    function processdiv(cartId) {
-        const quantityElement = document.getElementById(`quantity${cartId}`);
-        let quantity = parseInt(quantityElement.innerText);
-
-        quantity++;
-        quantityElement.innerText = quantity;
-        // อัปเดตราคาใน DOM หลังจากเพิ่มจำนวน
-        updateTotalPrice(cartId, quantity);
-        // ส่งข้อมูลการอัปเดตไปยังเซิร์ฟเวอร์และอัปเดตฐานข้อมูล
-        updateDatabase(cartId, quantity);
-    }
-
-    function updateTotalPrice(cartId, quantity) {
-        const priceElement = document.getElementById(`price${cartId}`);
-        const pricePerUnit = parseFloat(priceElement.getAttribute('data-price'));
-        const newPrice = (quantity * pricePerUnit).toFixed(2);
-        priceElement.innerText = newPrice;
-    }
-
-    function updateDatabase(cartId, increment, pricePerUnit) {
-        // ส่งข้อมูล POST ไปยังเซิร์ฟเวอร์
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'updatecart.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // ตรวจสอบคำตอบจากเซิร์ฟเวอร์
-                const response = JSON.parse(xhr.responseText);
-                if (response.success) {
-                    // การอัปเดตสำเร็จ
-                    console.log('ราคาถูกอัปเดตใหม่');
-
-                    // อัปเดตราคาใน DOM หลังจากการอัปเดต
-                    const priceElement = document.getElementById(`price${cartId}`);
-                    priceElement.innerText = response.newPrice;
-
-                    // อัปเดตจำนวนใน DOM หลังจากการอัปเดต
-                    const quantityElement = document.getElementById(`quantity${cartId}`);
-                    quantityElement.innerText = response.newAmount;
-                } else {
-                    // การอัปเดตไม่สำเร็จ
-                    console.error('เกิดข้อผิดพลาดในการอัปเดตราคา');
-                }
-            }
-        };
-
-        // ส่งข้อมูล POST ไปยังเซิร์ฟเวอร์
-        const data = `cartId=${cartId}&increment=${increment}&pricePerUnit=${pricePerUnit}`;
-        xhr.send(data);
-    }
-</script>
-processsum -->
 
 </html>
