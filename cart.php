@@ -1,14 +1,17 @@
 <?php
 
-use function PHPSTORM_META\type;
 
 include "dbconn.php";
 
 $get = $_POST['add'];
 $uid = $_POST['uid'];
-if (isset($_POST['add'])) {
+$sid = explode(',', $_POST['size']);
+$cid = explode(',', $_POST['crust']);
 
-    header("location: cart.php?uid=" . $uid);
+
+
+if (isset($_POST['add'])) {
+    header("location: cart.php?uid=" . $uid . "&sid=" . $sid[1] . "&cid=" . $cid[1]);
 }
 
 // $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
@@ -33,11 +36,11 @@ if (isset($_POST['add'])) {
         <?php
         error_reporting(E_ALL);
         // ini_set('display_errors', 1);
-
         // echo intval($_GET['uid']);
         if ($_POST) {
-            $pizza_image = $_POST['pizza_image'];
+            
             $pizza_name = $_POST['pizza_name'];
+            $pizza_image = $_POST['pizza_image'];
             $information = $_POST['information'];
             $pizza_price = intval($_POST['pizza_price']);
             $quantity = $_POST['quantity'];
@@ -45,26 +48,38 @@ if (isset($_POST['add'])) {
             $pid = intval($_POST['pid']);
             $uid = intval($_POST['uid']);
 
+
+
             if ($pid) {
-                $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, pizza.price as pizzaprice, pizza.name as pizzaname 
+
+                $param_cid_price = intval($cid[0]);
+                $param_sid_price = intval($sid[0]);
+                $param_cid = intval($cid[1]);
+                $param_sid = intval($sid[1]);
+
+                $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, pizza.price as pizzaprice, pizza.name as pizzaname
+                                        , crust.name as crustname, size.name as sizename
                                 from cart 
-                                INNER JOIN pizza ON cart.pid = pizza.pid 
-                                where cart.uid = ? and cart.pid = ?");
-                $stmt2->bind_param('ii', $uid, $pid);
+                                INNER JOIN pizza ON cart.pid = pizza.pid
+                                INNER JOIN crust ON cart.cid = crust.cid
+                                INNER JOIN size ON cart.sid = size.sid
+                                where cart.uid = ? and cart.pid = ? and cart.cid = ? and cart.sid = ? ");
+                $stmt2->bind_param('iiii', $uid, $pid, $param_cid, $param_sid);
                 $stmt2->execute();
                 $result2 = $stmt2->get_result();
 
                 $Found = false;
 
                 while ($row2 = $result2->fetch_assoc()) {
+                    
                     $Found = true;
-
+                    
+                    $newPrice = $newAmount * (intval($row2['pizzaprice']) + $param_cid_price + $param_sid_price);
                     $newAmount = $quantity + intval($row2['cartamount']);
-                    $newPrice = $newAmount * intval($row2['pizzaprice']);
                     $cardId = intval($row2['cartid']);
 
-                    $stmt = $conn->prepare("UPDATE cart SET price=?, amount=? WHERE cartid = ?");
-                    $stmt->bind_param('iii', $newPrice, $newAmount, $cardId);
+                    $stmt = $conn->prepare("UPDATE cart SET price=?, amount=?, cid=?, sid=? WHERE cartid = ?");
+                    $stmt->bind_param('iiiii', $newPrice, $newAmount, $param_cid, $param_sid, $cardId);
                     $stmt->execute();
                 }
 
@@ -95,7 +110,7 @@ if (isset($_POST['add'])) {
                     // $create_crat->execute();
 
                     $newAmount = $quantity;
-                    $newPrice = $newAmount * $pizza_price; // คำนวณราคารวมใหม่ตามจำนวนชิ้นใหม่
+                    $newPrice = $newAmount * ($pizza_price + $param_cid_price + $param_sid_price); // คำนวณราคารวมใหม่ตามจำนวนชิ้นใหม่
 
                     $address = "address";
                     $statuspizza = '1';
@@ -113,8 +128,12 @@ if (isset($_POST['add'])) {
                     $resultoid = $cheack_stmt->get_result();
                     $rowoid = $resultoid->fetch_assoc();
 
-                    $create_crat = $conn->prepare("INSERT INTO cart (oid, uid, pid, price, amount) VALUES (?, ?, ?, ?, ?)");
-                    $create_crat->bind_param("iiidd", $rowoid['oid'], $uid, $pid, $newPrice, $newAmount); // ใช้ $newPrice และ $newAmount แทน $pizza_price และ $quantity
+                    // echo $cid[1];
+                    // echo $sid[1];
+                    $param_cid = intval($cid[1]);
+                    $param_sid = intval($sid[1]);
+                    $create_crat = $conn->prepare("INSERT INTO cart (oid, uid, pid, price, amount, cid, sid, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                    $create_crat->bind_param("iiiddiis", $rowoid['oid'], $uid, $pid, $newPrice, $newAmount, $param_cid, $param_sid, $statuspizza); // ใช้ $newPrice และ $newAmount แทน $pizza_price และ $quantity
                     $create_crat->execute();
                 }
             }
@@ -199,6 +218,7 @@ if (isset($_POST['add'])) {
                         <div class="row" style="display: flex; justify-content: center; align-items: center; ">
 
                             <?php $row  = $result->fetch_assoc(); ?>
+                            
 
                             <div class="row" style="display: flex; justify-content: center; align-items: center; ">
                                 <?php
@@ -207,32 +227,38 @@ if (isset($_POST['add'])) {
                                 $stmt2->bind_param('i', $newuid);
                                 $stmt2->execute();
                                 $result2 = $stmt2->get_result();
+                                
+                                $allpizza = [];
 
-                                $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, cart.price as pizzaprice, pizza.name as pizzaname, pizza.image as pizzaimage
-                                                            , crust.name as crustname, size.name as sizename
+                                $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, cart.price as pizza_price
+                                                            , pizza.name as pizza_name, pizza.image as pizza_image
+                                                            , crust.name as crust_name, size.name as size_name
                                                             from cart 
                                                             INNER JOIN pizza ON cart.pid  = pizza.pid 
-                                                            INNER JOIN crust ON pizza.cid = crust.cid
-                                                            INNER JOIN size ON pizza.sid = size.sid
-                                                            where cart.uid = ? ");
-                                $stmt2->bind_param('i', $uid);
+                                                            INNER JOIN crust ON cart.cid = crust.cid
+                                                            INNER JOIN size ON cart.sid = size.sid
+                                                            where cart.uid = ?");
+                                $stmt2->bind_param('i', $newuid);
                                 $stmt2->execute();
                                 $result2 = $stmt2->get_result();
+
+                                
                                 while ($row2 = $result2->fetch_assoc()) { ?>
+
                                     <div class="row" style="border: 2px solid black; margin-top: 1%;">
 
                                         <div class="col-2" style="display: flex; justify-content: center; ">
-                                            <img src="<?= $row2['pizzaimage']; ?>" alt="photo" width="200px" height="130px">
+                                            <img src="<?= $row2['pizza_image']; ?>" alt="photo" width="200px" height="130px">
                                         </div>
                                         <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                            <h5> <?= $row2['pizzaname']; ?> </h5>
+                                            <h5> <?= $row2['pizza_name']; ?> </h5>
                                         </div>
                                         <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                            <h6> <?= $row2['crustname'] . " , " . $row2['sizename'] ?> </h6>
+                                            <h6> <?= $row2['crust_name'] . " , " . $row2['size_name'] ?> </h6>
                                         </div>
                                         <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
-                                            <h5 data-price="<?= $row2['pizzaprice']; ?>" id="price<?= $row2['cartid']; ?>">
-                                                <?= number_format($row2['pizzaprice'], 2) ?>
+                                            <h5 data-price="<?= $row2['pizza_price']; ?>" id="price<?= $row2['cartid']; ?>">
+                                                <?= number_format($row2['pizza_price'], 2) ?>
                                             </h5>
                                         </div>
                                         <div class="col-2" style="display: flex; align-items: center; margin-left: 6rem; ">
@@ -240,13 +266,13 @@ if (isset($_POST['add'])) {
                                                 <input type="hidden" name="lock" id="lock" value="1">
                                                 <input type="hidden" name="process" id="process" value="-1">
                                                 <input type="hidden" name="cartid" id="cartid" value="<?= $row2['cartid'] ?>">
-                                                <button type="submit" class="btn btn-danger" >-</button>
+                                                <button type="submit" class="btn btn-danger">-</button>
                                             </form>
                                             <h6 id="quantity<?= $row2['cartid'] ?>"> <?= $row2['cartamount']; ?> </h6>
                                             <form action="upanddown.php?uid=<?= $uid ?>" method="post" style="margin-left: 8%;">
                                                 <input type="hidden" name="process" id="process" value="1">
                                                 <input type="hidden" name="cartid" id="cartid" value="<?= $row2['cartid'] ?>">
-                                                <button type="submit" class="btn btn-success" > + </button>
+                                                <button type="submit" class="btn btn-success"> + </button>
                                             </form>
                                         </div>
                                         <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
@@ -265,9 +291,9 @@ if (isset($_POST['add'])) {
 
                     </div>
                 </div>
-                <div class="card">
+                <!-- <div class="card">
                     ยังไม่ทำ
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
