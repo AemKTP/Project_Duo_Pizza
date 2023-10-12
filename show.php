@@ -1,6 +1,7 @@
 <!-- ยังไม่มี uid -->
 <?php
 include "dbconn.php";
+error_reporting(E_ALL);
 
 $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
 ?>
@@ -125,62 +126,72 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
         <div class="row justify-content-center centercard">
             <div class="col-6">
                 <?php
-                $stmt = $conn->prepare("SELECT
-                    pizza.pid,
-                    pizza.name as name_pizza,
-                    pizza.image as image_pizza,
-                    pizza.price as pizza_price,
-                    crust.name as crust_name,
-                    size.price as size_price,
-                    size.name  as size_name,
-                    crust.price as crust_price
-                        FROM pizza
-                        INNER JOIN size ON pizza.sid = size.sid
-                        INNER JOIN crust ON pizza.cid = crust.cid
-                        WHERE pizza.pid = ?");
+                // $stmt = $conn->prepare("SELECT
+                //     pizza.pid,
+                //     pizza.name as name_pizza,
+                //     pizza.image as image_pizza,
+                //     pizza.price as pizza_price,
+                //     crust.name as crust_name,
+                //     size.price as size_price,
+                //     size.name  as size_name,
+                //     crust.price as crust_price
+                //         FROM pizza
+                //         INNER JOIN size ON pizza.sid = size.sid
+                //         INNER JOIN crust ON pizza.cid = crust.cid
+                //         WHERE pizza.pid = ?");
+                // $stmt->bind_param('i', $pid);
+                // $stmt->execute();
+                // $result = $stmt->get_result();
+                // $row = $result->fetch_assoc();
+
+                $stmt = $conn->prepare("SELECT name as pizza_name , image as pizza_image , price as pizza_price
+                                        FROM pizza
+                                        WHERE pizza.pid = ?");
                 $stmt->bind_param('i', $pid);
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $row = $result->fetch_assoc();
 
-
-
-                $sizeStmt = $conn->prepare("SELECT name, price FROM size");
-                $sizeStmt->execute();
-                $sizeResult = $sizeStmt->get_result();
-
+                $stmtSize = $conn->prepare("SELECT sid as size_sid, name as size_name, price as size_price
+                                            FROM size");
+                $stmtSize->execute();
+                $resultSize = $stmtSize->get_result();
+                // $rowSize = $resultSize->fetch_assoc();
 
                 $sizes = [];
-                while ($sizeRow = $sizeResult->fetch_assoc()) {
-                    $sizes[] = $sizeRow;
+                while ($rowSize = $resultSize->fetch_assoc()) {
+                    $sizes[] = $rowSize;
                 }
 
-
-                $crustStmt = $conn->prepare("SELECT name, price FROM crust");
-                $crustStmt->execute();
-                $crustResult = $crustStmt->get_result();
+                $stmtCrust = $conn->prepare("SELECT cid as crust_cid, name as crust_name, price as crust_price
+                                            FROM crust");
+                $stmtCrust->execute();
+                $resultCrust = $stmtCrust->get_result();
+                // $rowCrust = $resultCrust->fetch_assoc();
 
 
                 $crust = [];
-                while ($crustRow = $crustResult->fetch_assoc()) {
-                    $crust[] = $crustRow;
+                while ($rowCrust = $resultCrust->fetch_assoc()) {
+                    $crust[] = $rowCrust;
                 }
 
                 ?>
                 <div class="card">
                     <div class="row">
                         <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
-                        <img src="<?= $row['image_pizza'] ?>" alt="pizza-pic" style="width:100%;">
-                        <form action="cart.php?uid=<?= $uid ?>" method="post" style="margin-left:10rem;">
-                            <label for="cart">
+                        <img src="<?= $row['pizza_image'] ?>" alt="pizza-pic" style="width:100%;">
+                        <form action="cart.php?uid=<?= $uid ?>&sid=<?= $_POST["size"]?>&cid=<?= $_POST['crust']?>" method="post" style="margin-left:10rem;">
+                            <label for="size">
                                 <h3>เลือกไซต์:</h3>
                             </label>
-                            <select style="width:10rem;height:3rem;" name="cart" id="cart" onchange="calculateTotalPrice()">
+                            <select style="width:10rem;height:3rem;" name="size" id="size" onchange="calculateTotalPrice()">
                                 <?php if (!empty($sizes)) {
                                     foreach ($sizes as $size) { ?>
-                                        <option value="<?= $size['price'] ?>"> <?= $size['name'] ?></option>
-                                <?php }
+                                        <option value="<?= $size['size_price']?>,<?= $size['size_sid']?>" > <?= $size['size_name']?></option>
+                                <?php
+                                    }
                                 } ?>
+
                             </select>
                             <br><br>
 
@@ -190,7 +201,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             <select style="width:10rem;height:3rem;" name="crust" id="crust" onchange="calculateTotalPrice()">
                                 <?php if (!empty($crust)) {
                                     foreach ($crust as $crustOption) { ?>
-                                        <option value="<?= $crustOption['price'] ?>"><?= $crustOption['name'] ?></option>
+                                        <option value="<?= $crustOption['crust_price']?>,<?= $crustOption['crust_cid']?>"><?= $crustOption['crust_name'] ?></option>
                                 <?php }
                                 } ?>
                             </select>
@@ -200,7 +211,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                                 <label for="quantity" style="display: flex; justify-content: center; align-items: center;">
                                     <h3>จำนวน:</h3>
                                 </label>
-                                <span >
+                                <span>
                                     <button type="button" class="btn1 btn-danger btn-number" data-type="minus" data-field="quantity">
                                         <span class="glyphicon glyphicon-minus"></span>
                                     </button>
@@ -215,14 +226,14 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             <br><br>
 
                             <h1 style="margin-top:20px; margin-left:15rem;"><b><span id="totalPrice"><?= number_format($row['pizza_price'], 2) ?></span>บาท</b></h1>
-
+                            
                             <!-- Add hidden input fields to send data -->
                             <input type="hidden" name="add" value="1">
                             <input type="hidden" name="uid" value="<?= $uid ?>">
                             <input type="hidden" name="pid" value="<?= $pid ?>">
-                            <input type="hidden" name="pizza_name" value="<?= $row['name_pizza'] ?>">
-                            <input type="hidden" name="pizza_image" value="<?= $row['image_pizza'] ?>">
-                            <input type="hidden" name="information" value="<?= $size['name'] . ' , ' . $crustOption['name'] ?>">
+                            <input type="hidden" name="pizza_name" value="<?= $row['pizza_name'] ?>">
+                            <input type="hidden" name="pizza_image" value="<?= $row['pizza_image'] ?>">
+                            <input type="hidden" name="information" value="<?= $size['size_name'] . ' , ' . $crustOption['crust_name'] ?>">
                             <input type="hidden" name="pizza_price" value="<?= $row['pizza_price'] ?>">
                             <input type="hidden" name="size_price" id="size_price" value="0">
                             <input type="hidden" name="crust_price" id="crust_price" value="0">
@@ -239,45 +250,53 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    $(document).ready(function() {
-        $('.btn-number').click(function(e) {
-            e.preventDefault();
+        $(document).ready(function() {
+            $('.btn-number').click(function(e) {
+                e.preventDefault();
 
-            var fieldName = $(this).attr('data-field');
-            var type = $(this).attr('data-type');
-            var input = $("input[name='" + fieldName + "']");
-            var currentVal = parseInt(input.val());
+                var fieldName = $(this).attr('data-field');
+                var type = $(this).attr('data-type');
+                var input = $("input[name='" + fieldName + "']");
+                var currentVal = parseInt(input.val());
 
-            if (!isNaN(currentVal)) {
-                if (type == 'minus') {
-                    if (currentVal > input.attr('min')) {
-                        input.val(currentVal - 1).change();
+                if (!isNaN(currentVal)) {
+                    if (type == 'minus') {
+                        if (currentVal > input.attr('min')) {
+                            input.val(currentVal - 1).change();
+                        }
+                        if (parseInt(input.val()) == input.attr('min')) {
+                            $(this).attr('disabled', true);
+                        }
+                    } else if (type == 'plus') {
+                        if (currentVal < input.attr('max')) {
+                            input.val(currentVal + 1).change();
+                        }
+                        if (parseInt(input.val()) == input.attr('max')) {
+                            $(this).attr('disabled', true);
+                        }
                     }
-                    if (parseInt(input.val()) == input.attr('min')) {
-                        $(this).attr('disabled', true);
-                    }
-                } else if (type == 'plus') {
-                    if (currentVal < input.attr('max')) {
-                        input.val(currentVal + 1).change();
-                    }
-                    if (parseInt(input.val()) == input.attr('max')) {
-                        $(this).attr('disabled', true);
-                    }
+                } else {
+                    input.val(1);
                 }
-            } else {
-                input.val(1);
-            }
 
-            // เพิ่มส่วนนี้เพื่อเปิดการใช้งานปุ่มที่ถูกปิดไว้
-            $(".btn-number").removeAttr('disabled');
+                // เพิ่มส่วนนี้เพื่อเปิดการใช้งานปุ่มที่ถูกปิดไว้
+                $(".btn-number").removeAttr('disabled');
+            });
         });
-    });
-</script>
+    </script>
 
     <script>
         function calculateTotalPrice() {
-            var selectedSizePrice = parseFloat(document.getElementById("cart").value);
-            var selectedCrustPrice = parseFloat(document.getElementById("crust").value);
+            
+            var splitStringSize = document.getElementById("size").value.split(",");
+            var priceSize = splitStringSize[0];
+            
+            var splitStringCrust = document.getElementById("crust").value.split(",");
+            var priceCrust = splitStringCrust[0];
+
+            // var selectedCrustPrice = parseFloat(document.getElementById("size").value);
+            var selectedSizePrice = parseFloat(priceSize);
+            var selectedCrustPrice = parseFloat(priceCrust);
 
             var pizzaPrice = parseFloat(<?= $row['pizza_price'] ?>);
 
