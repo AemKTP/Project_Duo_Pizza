@@ -92,25 +92,33 @@ if (isset($_POST['add'])) {
                     $address = "address";
                     $statuspizza = '1';
 
-                    $fdate = '2023-10-06 10:05:59';
-                    $odate = '2023-10-06 10:05:59';
+                    // รับเวลาปัจจุบันของเครื่อง
+                    // date_default_timezone_set('Asia/Bangkok');
+                    // $current_time = date('Y-m-d H:i:s');
 
-                    $create_bid = $conn->prepare("INSERT INTO `order` (uid, total_price, adress, fdate, odate, status, pid) VALUES(?, 0, ?, ?, ?, ?, ?)");
-                    $create_bid->bind_param("issssi", $uid, $address, $fdate, $odate, $statuspizza, $pid);
-                    $create_bid->execute();
 
-                    $cheack_stmt = $conn->prepare("SELECT * from `order` where uid = ? and pid = ?");
-                    $cheack_stmt->bind_param('ii', $uid, $pid);
-                    $cheack_stmt->execute();
-                    $resultoid = $cheack_stmt->get_result();
-                    $rowoid = $resultoid->fetch_assoc();
+                    // $create_bid = $conn->prepare("INSERT INTO `order` (uid, total_price, adress, fdate, odate, status) VALUES(?, 0, ?, 'null', 'null', ?)");
+                    // $create_bid->bind_param("iss", $uid, $address, $statuspizza);
+                    // $create_bid->execute();
+
+                    // $cheack_stmt = $conn->prepare("SELECT * from `order` where uid = ? ");
+                    // $cheack_stmt->bind_param('i', $uid);
+                    // $cheack_stmt->execute();
+                    // $resultoid = $cheack_stmt->get_result();
+                    // $rowoid = $resultoid->fetch_assoc();
+
+                    // $cheack_stmt = $conn->prepare("SELECT * from `order` where uid = ? ");
+                    // $cheack_stmt->bind_param('i', $uid);
+                    // $cheack_stmt->execute();
+                    // $resultoid = $cheack_stmt->get_result();
+                    // $rowoid = $resultoid->fetch_assoc();
 
                     // echo $cid[1];
                     // echo $sid[1];
                     $param_cid = intval($cid[1]);
                     $param_sid = intval($sid[1]);
-                    $create_crat = $conn->prepare("INSERT INTO cart (oid, uid, pid, price, amount, cid, sid, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                    $create_crat->bind_param("iiiddiis", $rowoid['oid'], $uid, $pid, $newPrice, $newAmount, $param_cid, $param_sid, $statuspizza); // ใช้ $newPrice และ $newAmount แทน $pizza_price และ $quantity
+                    $create_crat = $conn->prepare("INSERT INTO cart (uid, pid, price, amount, cid, sid, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                    $create_crat->bind_param("iiddiis", $uid, $pid, $newPrice, $newAmount, $param_cid, $param_sid, $statuspizza); // ใช้ $newPrice และ $newAmount แทน $pizza_price และ $quantity
                     $create_crat->execute();
                 }
             }
@@ -268,37 +276,40 @@ if (isset($_POST['add'])) {
 
                     </div>
                 </div>
-
                 <form action="">
                     <div class="card" style="height: 100px; border-radius: 20px; margin-top: 1%;">
                         <div class="row" style="height: 100%;">
-                            <div class="col-7" style="display: flex;  align-items: center; margin-inline-start: 5%;">
-                                <h2>
-                                    ราคารวม
-                                </h2>
+                            <div class="col-7" style="display: flex; align-items: center; margin-inline-start: 5%;">
+                            <?php
+                                $stmtselects=$conn->prepare("select sum(price) as totalprice from  cart where uid=?");
+                                $stmtselects->bind_param("i",$uid);
+                                $stmtselects->execute();
+                                $resultselects=$stmtselects->get_result();
+                                while($rowselect=$resultselects->fetch_assoc()){
+                             ?>
+                                <b><h2>ราคารวม</h2></b>
                             </div>
                             <div class="col-2" style="display: flex; justify-content: center; align-items: center; margin-right: 0%;">
-                                <h2 >
-                                    เงิน
+                                <h2>
+                                    <?= number_format($rowselect['totalprice'],0)?>
                                 </h2>
                                 <h2>
-                                    /บาท
+                                       บาท
                                 </h2>
                             </div>
+                            <?php
+                                }
+                            ?>
                             <div class="col-2" style="display: flex; justify-content: center; align-items: center; margin-right: 1%;">
                                 <button type="button" class="btn btn-success">ยืนยันการสั่งซื้อ</button>
                             </div>
                         </div>
+                       
                     </div>
-
-
                 </form>
-
-
             </div>
         </div>
     </div>
-
 </body>
 
 <script>
@@ -326,7 +337,5 @@ if (isset($_POST['add'])) {
         });
     });
 </script>
-
-
 
 </html>
