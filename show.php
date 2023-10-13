@@ -178,7 +178,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                 ?>
                 <div class="card">
                     <div class="row">
-                        <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
+                        <h1 style="margin-top:20px;text-align:center;"><b><?= $row['pizza_name'] ?></b></h1>
                         <img src="<?= $row['pizza_image'] ?>" alt="pizza-pic" style="width:100%;">
                         <form action="cart.php?uid=<?= $uid ?>&sid=<?= $_POST["size"] ?>&cid=<?= $_POST['crust'] ?>" method="post" style="margin-left:10rem;">
                             <label for="size">
