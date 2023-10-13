@@ -180,14 +180,14 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                     <div class="row">
                         <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
                         <img src="<?= $row['pizza_image'] ?>" alt="pizza-pic" style="width:100%;">
-                        <form action="cart.php?uid=<?= $uid ?>&sid=<?= $_POST["size"]?>&cid=<?= $_POST['crust']?>" method="post" style="margin-left:10rem;">
+                        <form action="cart.php?uid=<?= $uid ?>&sid=<?= $_POST["size"] ?>&cid=<?= $_POST['crust'] ?>" method="post" style="margin-left:10rem;">
                             <label for="size">
                                 <h3>เลือกไซต์:</h3>
                             </label>
                             <select style="width:10rem;height:3rem;" name="size" id="size" onchange="calculateTotalPrice()">
                                 <?php if (!empty($sizes)) {
                                     foreach ($sizes as $size) { ?>
-                                        <option value="<?= $size['size_price']?>,<?= $size['size_sid']?>" > <?= $size['size_name']?></option>
+                                        <option value="<?= $size['size_price'] ?>,<?= $size['size_sid'] ?>"> <?= $size['size_name'] ?></option>
                                 <?php
                                     }
                                 } ?>
@@ -201,7 +201,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             <select style="width:10rem;height:3rem;" name="crust" id="crust" onchange="calculateTotalPrice()">
                                 <?php if (!empty($crust)) {
                                     foreach ($crust as $crustOption) { ?>
-                                        <option value="<?= $crustOption['crust_price']?>,<?= $crustOption['crust_cid']?>"><?= $crustOption['crust_name'] ?></option>
+                                        <option value="<?= $crustOption['crust_price'] ?>,<?= $crustOption['crust_cid'] ?>"><?= $crustOption['crust_name'] ?></option>
                                 <?php }
                                 } ?>
                             </select>
@@ -225,8 +225,9 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             </div>
                             <br><br>
 
-                            <h1 style="margin-top:20px; margin-left:15rem;"><b><span id="totalPrice"><?= number_format($row['pizza_price'], 2) ?></span>บาท</b></h1>
-                            
+                            <h1 style="margin-top:20px; margin-left:15rem;"><b><span id="totalPrice"><?= number_format($row['pizza_price'], 2) ?>
+                                    </span>บาท</b></h1>
+
                             <!-- Add hidden input fields to send data -->
                             <input type="hidden" name="add" value="1">
                             <input type="hidden" name="uid" value="<?= $uid ?>">
@@ -287,10 +288,10 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
 
     <script>
         function calculateTotalPrice() {
-            
+
             var splitStringSize = document.getElementById("size").value.split(",");
             var priceSize = splitStringSize[0];
-            
+
             var splitStringCrust = document.getElementById("crust").value.split(",");
             var priceCrust = splitStringCrust[0];
 
