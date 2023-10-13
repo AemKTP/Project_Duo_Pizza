@@ -86,29 +86,6 @@ if (isset($_POST['add'])) {
                 if (!$Found) {
 
 
-                    // $address = "address";
-                    // $statusna = '1';
-
-                    // $fdate = '2023-10-06 10:05:59';
-                    // $odate = '2023-10-06 10:05:59';
-
-                    // $create_bid = $conn->prepare("INSERT INTO `order` (uid, total_price, adress, fdate, odate, status, pid) VALUES(?, 0, ?, ?, ?, ?, ?)");
-                    // $create_bid->bind_param("issssi", $uid, $address, $fdate, $odate, $statusna, $pid);
-                    // $create_bid->execute();
-                    // // print_r($result);
-
-
-                    // $cheack_stmt = $conn->prepare("SELECT * from `order` where uid = ? and pid = ?");
-                    // $cheack_stmt->bind_param('ii', $uid, $pid);
-                    // $cheack_stmt->execute();
-                    // $resultoid = $cheack_stmt->get_result();
-                    // $rowoid = $resultoid->fetch_assoc();
-                    // // echo $rowoid['oid'];
-
-                    // $create_crat = $conn->prepare("INSERT INTO cart (oid,uid,pid,price,amount) values (?,?,?,?,?)");
-                    // $create_crat->bind_param("iiiii", $rowoid['oid'], $uid, $pid, $pizza_price, $quantity);
-                    // $create_crat->execute();
-
                     $newAmount = $quantity;
                     $newPrice = $newAmount * ($pizza_price + $param_cid_price + $param_sid_price); // คำนวณราคารวมใหม่ตามจำนวนชิ้นใหม่
 
