@@ -38,7 +38,7 @@ if (isset($_POST['add'])) {
         // ini_set('display_errors', 1);
         // echo intval($_GET['uid']);
         if ($_POST) {
-            
+
             $pizza_name = $_POST['pizza_name'];
             $pizza_image = $_POST['pizza_image'];
             $information = $_POST['information'];
@@ -71,11 +71,11 @@ if (isset($_POST['add'])) {
                 $Found = false;
 
                 while ($row2 = $result2->fetch_assoc()) {
-                    
+
                     $Found = true;
-                    
-                    $newPrice = $newAmount * (intval($row2['pizzaprice']) + $param_cid_price + $param_sid_price);
+
                     $newAmount = $quantity + intval($row2['cartamount']);
+                    $newPrice = $newAmount * (intval($row2['pizzaprice']) + $param_cid_price + $param_sid_price);
                     $cardId = intval($row2['cartid']);
 
                     $stmt = $conn->prepare("UPDATE cart SET price=?, amount=?, cid=?, sid=? WHERE cartid = ?");
@@ -218,7 +218,7 @@ if (isset($_POST['add'])) {
                         <div class="row" style="display: flex; justify-content: center; align-items: center; ">
 
                             <?php $row  = $result->fetch_assoc(); ?>
-                            
+
 
                             <div class="row" style="display: flex; justify-content: center; align-items: center; ">
                                 <?php
@@ -227,7 +227,7 @@ if (isset($_POST['add'])) {
                                 $stmt2->bind_param('i', $newuid);
                                 $stmt2->execute();
                                 $result2 = $stmt2->get_result();
-                                
+
                                 $allpizza = [];
 
                                 $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, cart.price as pizza_price
@@ -242,7 +242,7 @@ if (isset($_POST['add'])) {
                                 $stmt2->execute();
                                 $result2 = $stmt2->get_result();
 
-                                
+
                                 while ($row2 = $result2->fetch_assoc()) { ?>
 
                                     <div class="row" style="border: 2px solid black; margin-top: 1%;">
@@ -291,9 +291,33 @@ if (isset($_POST['add'])) {
 
                     </div>
                 </div>
-                <!-- <div class="card">
-                    ยังไม่ทำ
-                </div> -->
+
+                <form action="">
+                    <div class="card" style="height: 100px; border-radius: 20px; margin-top: 1%;">
+                        <div class="row" style="height: 100%;">
+                            <div class="col-7" style="display: flex;  align-items: center; margin-inline-start: 5%;">
+                                <h2>
+                                    ราคารวม
+                                </h2>
+                            </div>
+                            <div class="col-2" style="display: flex; justify-content: center; align-items: center; margin-right: 0%;">
+                                <h2 >
+                                    เงิน
+                                </h2>
+                                <h2>
+                                    /บาท
+                                </h2>
+                            </div>
+                            <div class="col-2" style="display: flex; justify-content: center; align-items: center; margin-right: 1%;">
+                                <button type="button" class="btn btn-success">ยืนยันการสั่งซื้อ</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+
+
             </div>
         </div>
     </div>
