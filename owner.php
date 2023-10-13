@@ -66,13 +66,10 @@ include 'dbconn.php';
                             , user.email    as user_email, user.address     as user_address
                             FROM `order`
                             INNER JOIN user ON user.uid  = order.uid
-                            INNER JOIN cart ON cart.cartid  = order.cart_id
+                            INNER JOIN cart ON cart.oid  = order.oid
                             ");
     $stmt->execute();
     $result = $stmt->get_result();
-
-
-
 
     ?>
 
@@ -137,7 +134,7 @@ include 'dbconn.php';
                                             </div>
                                             <div class="col-2">
                                                 <div>
-                                                    <h6>Pizza_List : <?= $row['order_odate'] ?></h6>
+                                                    <h6>Pizza_List : <?= $row[''] ?></h6>
                                                 </div>
                                             </div>
                                             <div class="col-2">
@@ -147,7 +144,7 @@ include 'dbconn.php';
                                             </div>
                                             <div class="col-2">
                                                 <div>
-                                                    <select style="width: 8rem; height: 2rem;" name="order_status" id="order_status">
+                                                    <select style="width: 8rem; height: 2rem;" name="order_status" id="order_status" onchange="">
                                                         <option value="กำลังเตรียมออเดอร์">กำลังเตรียมออเดอร์</option>
                                                         <option value="กำลังส่ง">กำลังส่ง</option>
                                                         <option value="ส่งแล้ว">ส่งแล้ว</option>
