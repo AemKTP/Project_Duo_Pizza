@@ -2,8 +2,29 @@
 include "dbconn.php";
 
 $uid = $_GET['uid'];
+
 // echo $uid;
+
+
+
+
+
+// $user_stmt = $conn->prepare("SELECT user.uid as user_uid, user.Address as user_address, user.Address as user_address
+// from user
+// where uid = ?");
+// $user_stmt->bind_param('i', $uid);
+// $user_stmt->execute();
+// $user_result = $user_stmtstmt->get_result();
+
+
+// $create_bid = $conn->prepare("INSERT INTO `order` (uid, total_price, adress, fdate, odate, status) VALUES(?, 0, ?, 'null', 'null', null)");
+// $create_bid->bind_param("is", $uid, $user_address);
+// $create_bid->execute();
+
+
 ?>
+
+
 <!doctype html>
 <html>
 
@@ -94,8 +115,6 @@ $uid = $_GET['uid'];
                                     from pizza");
             $stmt->execute();
             $result = $stmt->get_result();
-
-
             while ($row = $result->fetch_assoc()) { ?>
 
                 <div class="col-3" style="margin-bottom:3%;">
@@ -104,7 +123,7 @@ $uid = $_GET['uid'];
                             <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name'] ?></b></h1>
                             <img src="<?= $row['image'] ?>" alt="pizza-pic" style="width:100%;">
                             <h4 style="margin-top:20px;text-align:center;"><b>ราคาเริ่มต้น <?= $row['price'] ?></b></h4>
-                            <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $uid?>, <?= $row['pid']?>)">
+                            <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $uid ?>, <?= $row['pid'] ?>)">
                                 <h2>+เลือก</h2>
                             </button>
                             <h5></h5>
@@ -116,7 +135,7 @@ $uid = $_GET['uid'];
         </div>
     </div>
     <script>
-        function redirectToShowPage(uid,pid) {
+        function redirectToShowPage(uid, pid) {
             window.location.href = 'show.php?uid=' + uid + '&pid=' + pid; // ใช้ & แทน ? ในการระบุพารามิเตอร์เพิ่มเติม
         }
     </script>
