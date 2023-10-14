@@ -89,13 +89,13 @@ if (isset($_POST['add'])) {
                     $newAmount = $quantity;
                     $newPrice = $newAmount * ($pizza_price + $param_cid_price + $param_sid_price); // คำนวณราคารวมใหม่ตามจำนวนชิ้นใหม่
 
-                    $address = "address";
-                    $statuspizza = '1';
-
+                    
                     // รับเวลาปัจจุบันของเครื่อง
                     date_default_timezone_set('Asia/Bangkok');
                     $current_time = date('Y-m-d H:i:s');
-
+                    
+                    $address = "address";
+                    $statuspizza = '1';
 
                     $create_bid = $conn->prepare("INSERT INTO `order` (uid, total_price, adress, fdate, odate, status) VALUES(?, 0, ?, 'null', 'null', ?)");
                     $create_bid->bind_param("iss", $uid, $address, $statuspizza);
