@@ -66,7 +66,7 @@ $uid = $_GET['uid'];
                 <div class="card" style="overflow-y: scroll;">
                     <div class="row" style="margin-left: 2%; margin-right: 2%;">
                         <div class="container" style="margin-block: 2%;">
-                            <h1 style="text-decoration: underline;">สถานะของลูกค้า</h1>
+                            <h1 style="text-decoration: underline;">สถานะการสั่งซื้อ</h1>
                         </div>
 
                         <div class="row" style="margin-top: 0%; border-bottom: 2px solid tomato;">
@@ -91,83 +91,75 @@ $uid = $_GET['uid'];
                         <div class="row" style="display: flex; justify-content: center; align-items: center; ">
                             <?php
                             $statusshow = "สั่งแล้ว";
-                            $stmt = $conn->prepare("SELECT round, odate, `order`.status as statusorder
-                        FROM `order`
-                        INNER JOIN cart ON `order`.oid = cart.oid
-                        WHERE `order`.uid = ?
-                        AND cart.status = ?
-                        GROUP BY round, odate, statusorder");
+                            $stmt = $conn->prepare("SELECT round, cart.oid as orderid ,odate, `order`.status as statusorder
+                                                    FROM `order`
+                                                    INNER JOIN cart ON `order`.oid = cart.oid
+                                                    WHERE `order`.uid = ?
+                                                    AND    cart.status = ?
+                                                    GROUP BY round,odate,orderid,statusorder");
                             $stmt->bind_param("is", $uid, $statusshow);
                             $stmt->execute();
                             $result = $stmt->get_result();
-
-                            // Use a counter to track the loop iteration
                             $counter = 0;
 
                             while ($row = $result->fetch_assoc()) {
                                 if ($counter >= 0) {
-                                    // Create a new row after the first loop iteration
                                     echo '<div class="row" style="border-bottom: 2px solid tomato; margin-top: 1%; height: auto;">';
                                 }
                                 $counter++;
 
                                 echo '<div class="row" style="margin-left: 2%; margin-right: 2%; align-items: center;">
-            <div class="col-2">
-                <div>
-                    <h6>Order: ' . $row['round'] . ',<br>Date: ' . $row['odate'] . '</h6>
-                </div>
-            </div>';
+                                    <div class="col-2">
+                                        <div>
+                                            <h6>Order: ' . $row['round'] . ',<br>Date: ' . $row['odate'] . '</h6>
+                                        </div>
+                                    </div>';
 
                                 if ($row) {
                                     error_reporting(E_ALL);
                                     ini_set('display_errors', 1);
-                                    $stmtpizza = $conn->prepare("SELECT pizza.name as pizzaname, size.name as sizename, crust.name as crustname, SUM(cart.price) as price, SUM(amount) as amount
-                                    FROM `order`
-                                    inner join cart
-                                    on `order`.oid = cart.oid
-                                    inner join pizza
-                                    on cart.pid = pizza.pid
-                                    inner join crust
-                                    on cart.cid = crust.cid
-                                    inner join size
-                                    on size.sid = size.sid
-                                    where cart.uid = ?
-                                    and round = ?
-                                    GROUP by pizzaname, sizename, crustname");
-                                    $stmtpizza->bind_param("ii", $uid, $row['round']);
+                                    $stmtpizza = $conn->prepare("SELECT pizza.name as pizzaname, crust.name as crustname, size.name as sizename, SUM(cart.price) as price, SUM(cart.amount) as amount
+                                                                    FROM cart
+                                                                    INNER JOIN pizza ON cart.pid = pizza.pid
+                                                                    INNER JOIN size ON cart.sid = size.sid
+                                                                    INNER JOIN crust ON cart.cid = crust.cid
+                                                                    WHERE cart.uid = ?
+                                                                    AND cart.oid = ?
+                                                                    AND cart.status = ?
+                                                                    group by pizzaname,crustname,sizename");
+                                    $stmtpizza->bind_param("iis", $uid, $row['orderid'], $statusshow);
                                     $stmtpizza->execute();
                                     $resultpizza = $stmtpizza->get_result();
 
                                     while ($rowpizza = $resultpizza->fetch_assoc()) {
                                         if ($rowpizza) {
                                             echo '<div class="col-4">
-                                    <div>
-                                        <h6>' . $rowpizza['pizzaname'] . ' (' . $rowpizza['sizename'] . ',' . $rowpizza['crustname'] . ')</h6>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div>
-                                        <h6>' . $rowpizza['amount'] . ' ชิ้น</h6>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div>
-                                        <h6> ' . $rowpizza['price'] . ' THB</h6>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div>
-                                        <h6>' . $row['statusorder'] . '</h6>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                </div>';
+                                                <div>
+                                                    <h6>' . $rowpizza['pizzaname'] . ' (' . $rowpizza['sizename'] . ',' . $rowpizza['crustname'] . ')</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div>
+                                                    <h6>' . $rowpizza['amount'] . ' ชิ้น</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div>
+                                                    <h6> ' . $rowpizza['price'] . ' THB</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div>
+                                                    <h6>' . $row['statusorder'] . '</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                            </div>';
                                         }
                                     }
                                 }
-                                // Close the row div
                                 echo '</div>
-                    </div>';
+                                </div>';
                             }
                             ?>
                         </div>
