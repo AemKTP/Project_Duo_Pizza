@@ -2,6 +2,10 @@
 include 'dbconn.php';
 
 $uid = $_GET['uid'];
+
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 ?>
 
 <!DOCTYPE html>
@@ -116,8 +120,6 @@ $uid = $_GET['uid'];
                                     </div>';
 
                                 if ($row) {
-                                    error_reporting(E_ALL);
-                                    ini_set('display_errors', 1);
                                     $stmtpizza = $conn->prepare("SELECT pizza.name as pizzaname, crust.name as crustname, size.name as sizename, SUM(cart.price) as price, SUM(cart.amount) as amount
                                                                     FROM cart
                                                                     INNER JOIN pizza ON cart.pid = pizza.pid
@@ -131,7 +133,9 @@ $uid = $_GET['uid'];
                                     $stmtpizza->execute();
                                     $resultpizza = $stmtpizza->get_result();
 
+                                    $statusshow2 = false;
                                     while ($rowpizza = $resultpizza->fetch_assoc()) {
+                                        // echo $rowpizza['pizzaname'];
                                         if ($rowpizza) {
                                             echo '<div class="col-4">
                                                 <div>
@@ -149,12 +153,16 @@ $uid = $_GET['uid'];
                                                 </div>
                                             </div>
                                             <div class="col-2">
-                                                <div>
-                                                    <h6>' . $row['statusorder'] . '</h6>
-                                                </div>
+                                                <div>';
+                                            if ($statusshow2 == false) {
+                                                echo '  <h6>' . $row['statusorder'] . '</h6> ';
+                                            }
+
+                                            echo    '</div>
                                             </div>
                                             <div class="col-2">
                                             </div>';
+                                            $statusshow2 = true;
                                         }
                                     }
                                 }
