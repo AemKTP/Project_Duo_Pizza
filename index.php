@@ -87,20 +87,29 @@ include "dbconn.php";
     <div class="container">
         <div class="row">
             <?php
-            $stmt = $conn->prepare("SELECT pid,pizza.name as name_pizza , pizza.image as image_pizza, pizza.price as pizza_price from pizza , size ,crust where pizza.sid=size.sid  and pizza.cid=crust.cid ");
+            $stmt = $conn->prepare("SELECT *
+                                    from pizza");
             $stmt->execute();
             $result = $stmt->get_result();
 
             while ($row = $result->fetch_assoc()) { ?>
+
                 <div class="col-3" style="margin-bottom:3%;">
                     <div class="card">
                         <div class="row">
-                            <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name_pizza'] ?></b></h1>
-                            <img src="<?= $row['image_pizza'] ?>" alt="pizza-pic" style="width:100%;">
-                            <h4 style="margin-top:20px;text-align:center;"><b>*ราคาเริ่มต้น <?= $row['pizza_price'] ?></b></h4>
-                            <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $row['pid'] ?>)">
-                                <h2>+เลือก</h2>
-                            </button>
+                            <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name'] ?></b></h1>
+                            <img src="<?= $row['image'] ?>" alt="pizza-pic" style="width:100%;">
+                            <h4 style="margin-top:20px;text-align:center;"><b>*ราคาเริ่มต้น <?= $row['price'] ?></b></h4>
+                            <form action="login.php">
+                                <button type="submit" class="btn btn-warning" style="margin-left:12rem; margin-bottom:5px;">
+                                    <h2>Login</h2>
+                                </button>
+                            </form>
+                            <!-- <form action="register.php">
+                                <button type="submit" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;">
+                                    <h2>Register</h2>
+                                </button>
+                            </form> -->
                         </div>
                     </div>
                 </div>
@@ -108,12 +117,6 @@ include "dbconn.php";
             } ?>
         </div>
     </div>
-
-    <script>
-        function redirectToShowPage(pid) {
-            window.location.href = 'show.php?pid=' + pid;
-        }
-    </script>
 </body>
 
 </html>
