@@ -62,9 +62,21 @@ $owneruid = $_GET['uid'];
 <body class="bgcolor">
 
     <?php
-    $stmt = $conn->prepare("SELECT * FROM `order`");
-    $stmt->execute();
-    $result = $stmt->get_result();
+
+    // $pizza_stmt = $conn->prepare("SELECT *
+    //                         FROM cart
+    //                         where uid = ?");
+    // $pizza_stmt->bind_param('i', $owneruid);
+    // $pizza_stmt->execute();
+    // $pizza_result = $pizza_stmt->get_result();
+    $pizza_stmt = $conn->prepare("SELECT `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date, `order`.status as order_status
+                                , cart.price as cart_price
+                                FROM `order`
+                                INNER JOIN cart ON cart.oid = `order`.oid
+                                ");
+
+    $pizza_stmt->execute();
+    $pizza_result = $pizza_stmt->get_result();
     // $stmt = $conn->prepare("SELECT DISTINCT name, odate, oid, uid, total_price
     //                         FROM `order`");
     // $stmt->execute();
@@ -110,12 +122,11 @@ $owneruid = $_GET['uid'];
                                 <h3>Status</h3>
                             </div>
 
-
                         </div>
                         <div class="row" style="display: flex; justify-content: center; align-items: center; ">
                             <?php
-                            while ($row = $result->fetch_assoc()) {
-                                if ($row['odate'] != 'null') {
+                            while ($row_pizza = $pizza_result->fetch_assoc()) {
+                                if ($row_pizza['order_date'] != 'null') {
 
                             ?>
                                     <div class="row" style="border: 2px solid black; margin-top: 1%; height: 200px;">
@@ -123,15 +134,15 @@ $owneruid = $_GET['uid'];
                                             <div class="col-2">
                                                 <div>
                                                     <h6>Order :</h6>
-                                                    <h6><?= $row['oid'] ?></h6>
+                                                    <h6><?= $row_pizza['order_round'] ?></h6>
                                                 </div>
                                             </div>
                                             <div class="col-2" style="display: flex;">
                                                 <form action="showdetail_owner.php?uid=<?= $owneruid ?>" method="post">
                                                     <div>
-                                                        <input type="hidden" name="customeruid" id="customeruid" value="<?= $row['uid']?>">
-                                                        <input type="hidden" name="detail_uid" id="detail_uid" value="detail_<?= $row['uid'] ?>">
-                                                        <h6 style=" display:flex; justify-content: center;">User : <?= $row['uid'] ?></h6>
+                                                        <input type="hidden" name="customeruid" id="customeruid" value="<?= $row_pizza['order_uid'] ?>">
+                                                        <input type="hidden" name="detail_uid" id="detail_uid" value="detail_<?= $row_pizza['order_uid'] ?>">
+                                                        <h6 style=" display:flex; justify-content: center;">User : <?= $row_pizza['order_uid'] ?></h6>
                                                         <button type="submit" class="btn btn-primary">รายละเอียดลูกค้า</button>
                                                     </div>
 
@@ -140,19 +151,19 @@ $owneruid = $_GET['uid'];
 
                                             <div class="col-2">
                                                 <div>
-                                                    <h6>Odate : <?= $row['odate'] ?></h6>
+                                                    <h6>Odate : <?= $row_pizza['order_date'] ?></h6>
                                                 </div>
                                             </div>
                                             <div class="col-2">
                                                 <div>
-                                                    <h6>Total_Price : <?= $row['total_price'] ?></h6>
+                                                    <h6>Total_Price : </h6>
                                                 </div>
                                             </div>
                                             <div class="col-2">
                                                 <form action="showdetail_owner.php?uid=<?= $owneruid ?>" method="post">
 
                                                     <div>
-                                                        <input type="hidden" name="customeruid" id="customeruid" value="<?= $row['uid'] ?>">
+                                                        <input type="hidden" name="customeruid" id="customeruid" value="<?= $row_pizza['order_uid'] ?>">
                                                         <button type="submit" class="btn btn-primary">รายละเอียดพิซซ่า</button>
                                                     </div>
                                                 </form>
