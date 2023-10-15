@@ -136,13 +136,13 @@ ini_set('display_errors', 1);
                             while ($row_loop = $loop_result->fetch_assoc()) {
                                 $loopcheck[] = $row_loop;
                                 // echo $loopcheck['2']['order_round'];
+                                
                             }
 
 
                             while ($row_pizza = $pizza_result->fetch_assoc()) {
                                 echo $loopcheck[$counter]['order_round'];
                                 if ($row_pizza['order_date'] != 'null') {
-
 
                             ?>
                                     <!-- <div class="row" style="border: 2px solid black; margin-top: 1%; height: 200px;">
