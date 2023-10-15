@@ -52,12 +52,12 @@ $conn->close();
                                 }
                                 ?>
                             </select> -->
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col">
                                     <a class="forgetPass" style="font-size: 18px; justify-content: right; margin-right: 2%;" href="changepassword.php">forget Password?</a>
                                 </div>
-                            </div>
-                            <div class="row"> 
+                            </div> -->
+                            <div class="row" style="margin-top: 5%;"> 
                                 <div class="col">
                                     <div class="center-button">
                                         <button type="submit" class="btn btn-primary">Login</button>

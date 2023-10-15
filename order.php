@@ -137,68 +137,65 @@ $uid = $_GET['uid'];
             <div class="col-4">
                 <div class="card" style="height:35%;">
                     <div class="container">
+                        <!-- ในส่วน HTML -->
                         <div class="order">
                             <h2 style="margin-top:5%;text-decoration:underline">Address</h2>
                             <?php
+                            error_reporting(E_ALL);
+                            ini_set('display_errors', 1);
+                            $selectUserAddress = $conn->prepare("SELECT Address FROM user WHERE uid = ?");
+                            $selectUserAddress->bind_param("i", $uid);
+                            $selectUserAddress->execute();
+                            $resultUserAddress = $selectUserAddress->get_result();
+                            $rowUserAddress = $resultUserAddress->fetch_assoc();
 
-                            $selectaddress = $conn->prepare("select * from user where uid =?");
-                            $selectaddress->bind_param("i", $uid);
-                            $selectaddress->execute();
-                            $resultaddress = $selectaddress->get_result();
-                            $rowsaddress = $resultaddress->fetch_assoc();
+                            $selectOrderAddress = $conn->prepare("SELECT adress FROM `order` WHERE uid = ?");
+                            $selectOrderAddress->bind_param("i", $uid);
+                            $selectOrderAddress->execute();
+                            $resultOrderAddress = $selectOrderAddress->get_result();
+                            $rowOrderAddress = $resultOrderAddress->fetch_assoc();
 
-                            $selectaddressorder = $conn->prepare("select adress from `order` where uid =?");
-                            $selectaddressorder->bind_param("i", $uid);
-                            $selectaddressorder->execute();
-                            $resultaddressorder = $selectaddressorder->get_result();
-                            $rowsaddressorder = $resultaddressorder->fetch_assoc();
-
-
-                            $showaddress = $rowsaddress['Address'];
-                            if ($rowsaddressorder['adress'] || !$rowsaddressorder['adress']) {
-                            ?>
-                                <div id="showAddress" name="showAddress">
-                                    <?= 
-                                        $showaddress;
-                                    ?>
-                                </div>
-
-
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    change address
-                                </button>
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><b>New Address</b></h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <form action="update_order_address.php" method="post">
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="newAddress">
-                                                            <h6><b>Address:</b></h6>
-                                                        </label>
-                                                        <input type="text" id="newAddress" name="newAddress" style="width: 450px; height: 250px;" >
-                                                    </div>
-                                                </div>
-
-                                                <input type="hidden" name="uid" value="<?= $uid ?>">
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary" onclick="changeAddress()">Save</button>
-                                                </div>
-
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php
+                            if ($rowOrderAddress['adress'] != 'null') {
+                                $showAddress = $rowOrderAddress['adress'];
+                            } else {
+                                $showAddress = $rowUserAddress['Address'];
                             }
                             ?>
+                            <div id="showAddress" name="showAddress">
+                                <?= $showAddress; ?>
+                            </div>
 
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Change Address
+                            </button>
+
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel"><b>New Address</b></h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="update_order_address.php" method="post">
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="newAddress">
+                                                        <h6><b>New Address:</b></h6>
+                                                    </label>
+                                                    <input type="text" id="newAddress" name="newAddress" style="width: 450px; height: 250px;">
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="uid" value="<?= $uid ?>">
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary" onclick="changeAddress()">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
                 <?php
@@ -234,7 +231,7 @@ $uid = $_GET['uid'];
                                 </div>
                                 <div class="btntotal">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#paid">
-                                        paid
+                                        BUY
                                     </button>
                                 </div>
                             </div>
@@ -251,8 +248,8 @@ $uid = $_GET['uid'];
                                 </div>
                                 <div class="modal-body">
                                     <form action="processpaid.php?uid=<?= $uid ?>" method="post">
-                                        <input type="radio" name="pay" value="1">เงินสด
-                                        <input type="radio" name="pay" value="2">บัตรเครดิต
+                                        <input type="radio" name="pay" value="1" required>เงินสด
+                                        <input type="radio" name="pay" value="2" required>บัตรเครดิต
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -270,12 +267,10 @@ $uid = $_GET['uid'];
     </div>
 
     <script>
-        function changeAddress(){
-
-            document.getElementById("showAddress").value = "1234Test";
-
+        function changeAddress() {
+            var newAddress = document.getElementById("newAddress").value;
+            document.getElementById("showAddress").innerText = newAddress;
         }
-
     </script>
 </body>
 

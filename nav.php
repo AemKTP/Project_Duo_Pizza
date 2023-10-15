@@ -7,6 +7,13 @@ $stmt = $conn->prepare("select * from user where uid = ?");
 $stmt->bind_param('i', $uid);
 $stmt->execute();
 $result = $stmt->get_result();
+
+// $stmt = $conn->prepare("select * from user where uid = ?");
+// $stmt->bind_param('i', $uid);
+// $stmt->execute();
+// $result = $stmt->get_result();
+
+
 ?>
 
 <!DOCTYPE html>

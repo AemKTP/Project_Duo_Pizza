@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
     $updateAddress = $conn->prepare("UPDATE `order` SET adress = ? WHERE uid = ?");
-    $updateAddress->bind_param("si", $newAddress, $uid );
+    $updateAddress->bind_param("si", $newAddress, $uid);
     $updateAddress->execute();
 
     

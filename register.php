@@ -7,6 +7,9 @@ $stmt->execute();
 $result = $stmt->get_result();
 $result->fetch_assoc();
 
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 ?>
 
 <!DOCTYPE html>
@@ -78,43 +81,38 @@ $result->fetch_assoc();
                             <img src="pizza.png" alt="logo" width="100px">
                             <h2>Register</h2>
                         </div>
-                        <form action="" method="post" style="margin-right: 10%; margin-left: 10%;">
+                        <form action="processregister.php" method="post" style="margin-right: 10%; margin-left: 10%;">
                             <div class="row">
                                 <div style="margin-block: 1%; ">
-                                    <label for="" name="name">Username | ชื่อ</label><br>
-                                    <input type="text" name="name" style="border-radius: 50px; width: 100%;" required>
+                                    <label for="" name="name">Name | ชื่อ</label><br>
+                                    <input type="text" name="name" id="name" style="border-radius: 50px; width: 100%;" required>
                                 </div>
                                 <div style="margin-block: 1%;">
                                     <label for="" name="email">Email | อีเมล</label><br>
-                                    <input type="email" name="email" style="border-radius: 50px; width: 100%;" required>
+                                    <input type="email" name="email" id="email" style="border-radius: 50px; width: 100%;" required>
                                 </div>
                                 <div style="margin-block: 1%;">
                                     <label for="" name="password">Password | รหัสผ่าน</label><br>
-                                    <input type="password" name="password" style="border-radius: 50px; width: 100%;" required>
+                                    <input type="password" name="password" id="password" style="border-radius: 50px; width: 100%;" required>
                                 </div>
                                 <div style="margin-block: 1%;">
                                     <label for="" name="confirmpassword">Confirm Password | รหัสผ่านอีกครั้ง</label><br>
-                                    <input type="password" name="confirmpassword" style="border-radius: 50px; width: 100%;" required>
+                                    <input type="password" name="confirmpassword" id="confirmpassword" style="border-radius: 50px; width: 100%;" required>
                                 </div>
                                 <div style="margin-block: 1%;">
                                     <label for="" name="phone">Phone | เบอร์โทร</label><br>
-                                    <input type="tel" name="phone" pattern="[0-9]{10}" style="border-radius: 50px; width: 100%;" required>
+                                    <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" style="border-radius: 50px; width: 100%;" required>
+                                </div>
+                                <div style="margin-block: 1%;">
+                                    <label for="" name="Address">Address | ที่อยู่</label><br>
+                                    <input type="text" name="Address" id="Address" style="border-radius: 10px; width: 100%; height: 100px;" required>
                                 </div>
                                 <div style="margin-block: 1%;">
                                     <label for="" name="picture">Picture | รูป</label><br>
-                                    <input type="text" name="picture" style="border-radius: 50px; width: 100%;" required>
+                                    <input type="text" name="picture" id="picture" style="border-radius: 50px; width: 100%;" required>
                                 </div>
-                                <div style="margin-block: 5%;">
-                                    type
-                                    <select name="type" id="" required>
-                                        <?php
-                                        foreach ($enum_values as $value) {
-                                            echo "<option value='" . $value . "'>" . $value . "</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="center" style="margin-bottom: 5%;">
+                                
+                                <div class="center" style="margin-bottom: 5%; margin-top: 5%;">
                                     <input type="submit" value="Register" class="btn btn-success" style="border-radius: 50px;">
                                 </div>
                             </div>

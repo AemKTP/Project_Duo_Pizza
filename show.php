@@ -216,7 +216,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                                         <span class="glyphicon glyphicon-minus"></span>
                                     </button>
                                 </span>
-                                <input class="input" type="text" name="quantity" value="1" min="1" max="500" id="quantity" style="font-size: 20px; ">
+                                <input class="input" type="text" name="quantity" value="1" min="1" max="500" id="quantity" style="font-size: 20px; " readonly>
                                 <span>
                                     <button type="button" class="btn1 btn-success btn-number" data-type="plus" data-field="quantity">
                                         <span class="glyphicon glyphicon-plus"></span>

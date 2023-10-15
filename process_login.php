@@ -27,10 +27,9 @@ $type2 = 'ลูกค้า';
 $stmt = $conn->prepare("Select * from user");
 $stmt->execute();
 $result = $stmt->get_result();
-
 while ($row = $result->fetch_assoc()){
     // echo $row['name'];
-
+    
     if($row['email'] == $email){
         if (password_verify($password, $row['password'])) {
             if($row['type']== $type1){
@@ -41,15 +40,21 @@ while ($row = $result->fetch_assoc()){
             }
             else{
                 header("Location: login.php");
-
+                
             }
-
+            
         }
-        break;
+        else{
 
+            echo '<script type="text/javascript">';
+            echo 'alert("อีเมล หรือ รหัสผ่านไม่ถูกต้อง.");'; // Display an alert dialog
+            echo 'window.location.href = "login.php";'; // Redirect to another_page.php
+            echo '</script>';
+        }
+        
     }
     else{
-
+        
         echo '<script type="text/javascript">';
         echo 'alert("อีเมล หรือ รหัสผ่านไม่ถูกต้อง.");'; // Display an alert dialog
         echo 'window.location.href = "login.php";'; // Redirect to another_page.php

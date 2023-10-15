@@ -105,11 +105,11 @@ include "dbconn.php";
                                     <h2>Login</h2>
                                 </button>
                             </form>
-                            <!-- <form action="register.php">
+                            <form action="register.php">
                                 <button type="submit" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;">
                                     <h2>Register</h2>
                                 </button>
-                            </form> -->
+                            </form>
                         </div>
                     </div>
                 </div>

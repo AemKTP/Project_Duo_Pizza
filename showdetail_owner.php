@@ -4,13 +4,11 @@ include 'dbconn.php';
 $owneruid = $_GET['uid'];
 $customeruid = $_POST['customeruid'];
 $detail_uid = $_POST['detail_uid'];
-
-// echo $customeruid;
-// echo $detail_uid;
-// echo $owneruid;
+$customerround = $_POST['customerround'];
 
 
 error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $user_stmt = $conn->prepare("SELECT * FROM user where uid = ?");
 $user_stmt->bind_param('i', $customeruid);
@@ -25,8 +23,9 @@ $pizza_stmt = $conn->prepare("SELECT cart.uid    as cart_uid, cart.price     as 
                             INNER JOIN pizza ON cart.pid = pizza.pid
                             INNER JOIN crust ON cart.cid = crust.cid
                             INNER JOIN size ON cart.sid = size.sid
-                            where uid = ?");
-$pizza_stmt->bind_param('i', $customeruid);
+                            INNER JOIN `order` ON cart.oid = `order`.oid
+                            where `order`.uid = ? and `order`.round = ?");
+$pizza_stmt->bind_param('ii', $customeruid, $customerround);
 $pizza_stmt->execute();
 $pizza_result = $pizza_stmt->get_result();
 

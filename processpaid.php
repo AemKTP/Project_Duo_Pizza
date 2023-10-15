@@ -32,9 +32,10 @@ while ($rowrslstmt = $resultselectstmt->fetch_assoc()) {
     }
 }
 $statusorder = 'null';
+$waiting_order = 'กำลังเตรียมออเดอร์';
 
-$updateorderstmt = $conn->prepare("update `order` set odate = ?, status = ?, round = ? where uid = ? and status = ?");
-$updateorderstmt->bind_param('ssiis', $current_time, $statuspizza, $round, $useruid, $statusorder);
+$updateorderstmt = $conn->prepare("update `order` set fdate = ?, odate = ?, status = ?, round = ? where uid = ? and status = ?");
+$updateorderstmt->bind_param('sssiis', $waiting_order, $current_time, $statuspizza, $round, $useruid, $statusorder);
 $updateorderstmt->execute();
 
 header("location: customerstatus.php?uid=".$useruid);
