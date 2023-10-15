@@ -165,13 +165,11 @@ $uid = $_GET['uid'];
                                         }
                                     }
                                 }
-
                                 // Close the row div
                                 echo '</div>
                     </div>';
                             }
                             ?>
-
                         </div>
                     </div>
                 </div>
