@@ -66,36 +66,13 @@ ini_set('display_errors', 1);
 <body class="bgcolor">
 
     <?php
-    $loop_stmt = $conn->prepare("SELECT `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date, `order`.status as order_status
-                                , cart.price as cart_price
+
+
+    $pizza_stmt = $conn->prepare("SELECT distinct `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date
                                 FROM `order`
-                                INNER JOIN cart ON cart.oid = `order`.oid
-                                ");
-
-    $loop_stmt->execute();
-    $loop_result = $loop_stmt->get_result();
-
-
-    $pizza_stmt = $conn->prepare("SELECT `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date, `order`.status as order_status
-                                , cart.price as cart_price
-                                FROM `order`
-                                INNER JOIN cart ON cart.oid = `order`.oid
                                 ");
     $pizza_stmt->execute();
     $pizza_result = $pizza_stmt->get_result();
-    // $stmt = $conn->prepare("SELECT DISTINCT name, odate, oid, uid, total_price
-    //                         FROM `order`");
-    // $stmt->execute();
-    // $result = $stmt->get_result();
-    // $stmt = $conn->prepare("SELECT `order`.oid as order_oid, `order`.odate  as order_odate, `order`.total_price as order_total_price
-    //                         , user.uid      as user_uid, user.name          as user_name, user.phone            as user_phone
-    //                         , user.email    as user_email, user.address     as user_address
-    //                         FROM `order`
-    //                         INNER JOIN user ON user.uid  = order.uid
-    //                         INNER JOIN cart ON cart.oid  = order.oid
-    //                         ");
-    // $stmt->execute();
-    // $result = $stmt->get_result();
 
     ?>
 
@@ -131,78 +108,85 @@ ini_set('display_errors', 1);
                         </div>
                         <div class="row" style="display: flex; justify-content: center; align-items: center; ">
                             <?php
-                            $counter = 0;
-                            $loopcheck = [];
-                            while ($row_loop = $loop_result->fetch_assoc()) {
-                                $loopcheck[] = $row_loop;
-                                echo $loopcheck['0']['cart_price'];
-                                // echo $loopcheck['2']['order_round'];
 
-                            }
-
+                            $counter = 1;
                             while ($row_pizza = $pizza_result->fetch_assoc()) {
-                                // echo $loopcheck[$counter]['order_round'];
+
                                 if ($row_pizza['order_date'] != 'null') {
+
+                                    $pizza_stmt_check = $conn->prepare("SELECT distinct`order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date
+                                                                        , sum(cart.price) as cart_price
+                                                                        FROM `order`
+                                                                        INNER JOIN cart ON cart.oid = `order`.oid
+                                                                        where `order`.round = ? and `order`.uid = ? and `order`.odate = ?
+                                                                        group by order_round, order_uid, order_date
+                                                                        ");
+                                    $pizza_stmt_check->bind_param('iis', $row_pizza['order_round'], $row_pizza['order_uid'], $row_pizza['order_date']);
+                                    $pizza_stmt_check->execute();
+                                    $pizza_result_check = $pizza_stmt_check->get_result();
+
+                                    while ($row_pizza_check = $pizza_result_check->fetch_assoc()) {
+
+
                             ?>
-                                    <!-- <div class="row" style="border: 2px solid black; margin-top: 1%; height: 200px;">
-                                        <div class="row" style="margin-left: 2%; margin-right: 2%; align-items: center;">
-                                            <div class="col-2">
-                                                <div>
-                                                    <h6>Order :</h6>
-                                                    <h6><?= $row_pizza['order_round'] ?></h6>
-                                                </div>
-                                            </div>
-                                            <div class="col-2" style="display: flex;">
-                                                <form action="showdetail_owner.php?uid=<?= $owneruid ?>" method="post">
+                                        <div class="row" style="border: 2px solid black; margin-top: 1%; height: 200px;">
+                                            <div class="row" style="margin-left: 2%; margin-right: 2%; align-items: center;">
+                                                <div class="col-2">
                                                     <div>
-                                                        <input type="hidden" name="customeruid" id="customeruid" value="<?= $row_pizza['order_uid'] ?>">
-                                                        <input type="hidden" name="detail_uid" id="detail_uid" value="detail_<?= $row_pizza['order_uid'] ?>">
-                                                        <h6 style=" display:flex; justify-content: center;">User : <?= $row_pizza['order_uid'] ?></h6>
-                                                        <button type="submit" class="btn btn-primary">รายละเอียดลูกค้า</button>
+                                                        <h6>Order :</h6>
+                                                        <h6><?= $counter ?></h6>
                                                     </div>
-
-                                                </form>
-                                            </div>
-
-                                            <div class="col-2">
-                                                <div>
-                                                    <h6>Odate : <?= $row_pizza['order_date'] ?></h6>
                                                 </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div>
-                                                    <h6>Total_Price : </h6>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <form action="showdetail_owner.php?uid=<?= $owneruid ?>" method="post">
+                                                <div class="col-2" style="display: flex;">
+                                                    <form action="showdetail_owner.php?uid=<?= $owneruid ?>" method="post">
+                                                        <div>
+                                                            <input type="hidden" name="customeruid" id="customeruid" value="<?= $row_pizza_check['order_uid'] ?>">
+                                                            <input type="hidden" name="detail_uid" id="detail_uid" value="detail_<?= $row_pizza_check['order_uid'] ?>">
+                                                            <h6 style=" display:flex; justify-content: center;">User : <?= $row_pizza_check['order_uid'] ?></h6>
+                                                            <button type="submit" class="btn btn-primary">รายละเอียดลูกค้า</button>
+                                                        </div>
 
+                                                    </form>
+                                                </div>
+
+                                                <div class="col-2">
                                                     <div>
-                                                        <input type="hidden" name="customeruid" id="customeruid" value="<?= $row_pizza['order_uid'] ?>">
-                                                        <button type="submit" class="btn btn-primary">รายละเอียดพิซซ่า</button>
+                                                        <h6>Odate : <?= $row_pizza_check['order_date'] ?></h6>
                                                     </div>
-                                                </form>
-                                            </div>
-                                            <div class="col-2">
-                                                <div>
-                                                    <select style="width: 8rem; height: 2rem;" name="order_status" id="order_status" onchange="">
-                                                        <option value="กำลังเตรียมออเดอร์">กำลังเตรียมออเดอร์</option>
-                                                        <option value="กำลังส่ง">กำลังส่ง</option>
-                                                        <option value="ส่งแล้ว">ส่งแล้ว</option>
-                                                        <option value="ยกเลิก">ยกเลิก</option>
-                                                    </select>
+                                                </div>
+                                                <div class="col-2">
+                                                    <div>
+                                                        <h6>Total_Price : <?= $row_pizza_check['cart_price']; ?></h6>
+                                                    </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <form action="showdetail_owner.php?uid=<?= $owneruid ?>" method="post">
+
+                                                        <div>
+                                                            <input type="hidden" name="customeruid" id="customeruid" value="<?= $row_pizza_check['order_uid'] ?>">
+                                                            <button type="submit" class="btn btn-primary">รายละเอียดพิซซ่า</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="col-2">
+                                                    <div>
+                                                        <select style="width: 8rem; height: 2rem;" name="order_status" id="order_status" onchange="">
+                                                            <option value="กำลังเตรียมออเดอร์">กำลังเตรียมออเดอร์</option>
+                                                            <option value="กำลังส่ง">กำลังส่ง</option>
+                                                            <option value="ส่งแล้ว">ส่งแล้ว</option>
+                                                            <option value="ยกเลิก">ยกเลิก</option>
+                                                        </select>
 
 
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> -->
 
                             <?php
+                                        $counter = $counter + 1;
+                                    }
                                 }
-
-
-                                $counter = $counter + 1;
                             } ?>
                         </div>
 
