@@ -30,11 +30,7 @@ $pizza_stmt->bind_param('i', $customeruid);
 $pizza_stmt->execute();
 $pizza_result = $pizza_stmt->get_result();
 
-
-
 ?>
-
-
 
 
 <!DOCTYPE html>
