@@ -100,9 +100,9 @@ $uid = $_GET['uid'];
                             $stmt->bind_param("is", $uid, $statusshow);
                             $stmt->execute();
                             $result = $stmt->get_result();
-                            while($row = $result->fetch_assoc()) {
+                            if ($row = $result->fetch_assoc()) {
                             ?>
-                                <div class="row" style="border: 2px solid black; margin-top: 1%; height: 200px;">
+                                <div class="row" style="border: 2px solid black; margin-top: 1%; height: auto;">
                                     <div class="row" style="margin-left: 2%; margin-right: 2%; align-items: center;">
                                         <div class="col-2">
                                             <div>
@@ -110,8 +110,9 @@ $uid = $_GET['uid'];
                                             </div>
                                         </div>
                                         <?php
-                                        echo "love";
-                                            $stmtpizza=$conn->prepare("SELECT pizza.name as pizzaname, size.name as sizename, crust.name as crustname ,SUM(cart.price) as price,SUM(amount) as amount
+                                        error_reporting(E_ALL);
+                                        ini_set('display_errors', 1);
+                                        $stmtpizza = $conn->prepare("SELECT pizza.name as pizzaname, size.name as sizename, crust.name as crustname ,SUM(cart.price) as price,SUM(amount) as amount
                                                                         FROM `order`
                                                                         inner join cart
                                                                         on order.oid    =   cart.oid
@@ -122,45 +123,50 @@ $uid = $_GET['uid'];
                                                                         inner join size
                                                                         on  size.sid    =   size.sid
                                                                         where  cart.uid     = ?
-                                                                        and    round   =   ?");
-                                            echo "love";
-                                           $stmtpizza->bind_param("ii",$uid,$row['round']);
-                                           $resultpizza=$stmtpizza->get_result();
-                                           while($rowpizza=$resultpizza->fetch_assoc()){
+                                                                        and    round   =   ?
+                                                                        GROUP by pizzaname,sizename,crustname");
+                                        $stmtpizza->bind_param("ii", $uid, $row['round']);
+                                        $stmtpizza->execute();
+                                        $resultpizza = $stmtpizza->get_result();
+                                        while ($rowpizza = $resultpizza->fetch_assoc()) {
                                         ?>
-                                        <div class="col-4">
-                                            <div>
-                                                <h6><?=$rowpizza['pizzaname']?> (<?=$rowpizza['sizename']?>,<?=$rowpizza['crustname']?>)</h6>
+
+                                            <div class="col-4">
+                                                <div>
+                                                    <h6><?= $rowpizza['pizzaname'] ?> (<?= $rowpizza['sizename'] ?>,<?= $rowpizza['crustname'] ?>)</h6>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div>
-                                                <h6><?=$rowpizza['amount']?> ชิ้น</h6>
+                                            <div class="col-2">
+                                                <div>
+                                                    <h6><?= $rowpizza['amount'] ?> ชิ้น</h6>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div>
-                                                <h6> <?=$rowpizza['price']?> THB</h6>
+                                            <div class="col-2">
+                                                <div>
+                                                    <h6> <?= $rowpizza['price'] ?> THB</h6>
+                                                </div>
                                             </div>
-                                        <?php
-                                           }
-                                        ?>
-                                        </div>
-                                        <div class="col-2">
-                                            <div>
-                                                <h6><?= $row['statusorder'] ?></h6>
+                                            <div class="col-2">
+                                                <div>
+                                                    <h6><?= $row['statusorder'] ?></h6>
+                                                </div>
                                             </div>
-                                        </div>
+                                            <div class="col-2">
+
+
+                                            </div>
                                     <?php
                                         }
+                                    }
                                     ?>
+                                    </div>
                                 </div>
-                            </div>                       
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </body>
-</html>  
+
+</html>
