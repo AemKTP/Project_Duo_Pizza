@@ -2,6 +2,10 @@
 include 'dbconn.php';
 
 $owneruid = $_GET['uid'];
+
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 ?>
 
 <!DOCTYPE html>
@@ -62,19 +66,21 @@ $owneruid = $_GET['uid'];
 <body class="bgcolor">
 
     <?php
-
-    // $pizza_stmt = $conn->prepare("SELECT *
-    //                         FROM cart
-    //                         where uid = ?");
-    // $pizza_stmt->bind_param('i', $owneruid);
-    // $pizza_stmt->execute();
-    // $pizza_result = $pizza_stmt->get_result();
-    $pizza_stmt = $conn->prepare("SELECT `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date, `order`.status as order_status
+    $loop_stmt = $conn->prepare("SELECT distinct `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date, `order`.status as order_status
                                 , cart.price as cart_price
                                 FROM `order`
                                 INNER JOIN cart ON cart.oid = `order`.oid
                                 ");
 
+    $loop_stmt->execute();
+    $loop_result = $loop_stmt->get_result();
+
+
+    $pizza_stmt = $conn->prepare("SELECT distinct `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date, `order`.status as order_status
+                                , cart.price as cart_price
+                                FROM `order`
+                                INNER JOIN cart ON cart.oid = `order`.oid
+                                group by order_round,order_uid,order_date,order_status,cart_price");
     $pizza_stmt->execute();
     $pizza_result = $pizza_stmt->get_result();
     // $stmt = $conn->prepare("SELECT DISTINCT name, odate, oid, uid, total_price
@@ -125,11 +131,21 @@ $owneruid = $_GET['uid'];
                         </div>
                         <div class="row" style="display: flex; justify-content: center; align-items: center; ">
                             <?php
+                            $counter = 0;
+                            $loopcheck = [];
+                            while ($row_loop = $loop_result->fetch_assoc()) {
+                                $loopcheck[] = $row_loop;
+                                // echo $loopcheck['2']['order_round'];
+                            }
+
+
                             while ($row_pizza = $pizza_result->fetch_assoc()) {
+                                echo $loopcheck[$counter]['order_round'];
                                 if ($row_pizza['order_date'] != 'null') {
 
+
                             ?>
-                                    <div class="row" style="border: 2px solid black; margin-top: 1%; height: 200px;">
+                                    <!-- <div class="row" style="border: 2px solid black; margin-top: 1%; height: 200px;">
                                         <div class="row" style="margin-left: 2%; margin-right: 2%; align-items: center;">
                                             <div class="col-2">
                                                 <div>
@@ -181,9 +197,13 @@ $owneruid = $_GET['uid'];
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
-                            <?php }
+                            <?php
+                                }
+
+
+                                $counter = $counter + 1;
                             } ?>
                         </div>
 
