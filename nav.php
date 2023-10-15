@@ -25,7 +25,8 @@ $result = $stmt->get_result();
             color: black;
             transition: color 0.3s;
         }
-        a:hover{
+
+        a:hover {
             color: black;
         }
 
@@ -52,7 +53,7 @@ $result = $stmt->get_result();
                     <div class="container" style="margin-block: 1%;">
                         <ul class="d-flex align-items-center list-unstyled ml-auto">
                             <li style="margin-right: 20px;">
-                                <a href="customer.php?uid=<?= $uid?>" style="text-decoration: none;">
+                                <a href="customer.php?uid=<?= $uid ?>" style="text-decoration: none;">
                                     <img src="pizza.png" alt="logo" width="100px">
                             <li>
                                 <h1>Pizza Shop</h1>
@@ -63,9 +64,16 @@ $result = $stmt->get_result();
                                 <input type="search" name="search" placeholder="Search" style=" border-radius: 50px; background-color: lightgray;">
                             </li>
                             <li style="margin-left: auto;">
-                                <a href="cart.php?uid=<?= $uid?>" style="display: flex; align-items: center;">
-                                    <img src="shoppingcart.png" alt="shoppingcart" style="margin-top: 10%;" width="70px" height="70px">
-                            <li id="mySidenav" class="sidenav" >
+                                <a href="cart.php?uid=<?= $uid ?>" style="display: flex; align-items: center;">
+                                    <img src="shoppingcart.png" alt="shoppingcart" style="margin-top: 10%; margin-left: 10%;" width="70px" height="70px">
+                                </a>
+                            </li>
+                            <li style="margin-right: auto;">
+                                <a href="customerstatus.php?uid=<?= $uid ?>" style="display: flex; align-items: center;">
+                                    <img src="bill.png" alt="bill" style="margin-top: 10%; margin-left: 50%;" width="50px" height="50px">
+                                </a>
+                            </li>
+                            <li id="mySidenav" class="sidenav">
                                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 
                                 <?php $row = $result->fetch_assoc() ?>
@@ -78,7 +86,7 @@ $result = $stmt->get_result();
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" >
+                                <div class="row">
                                     <div class="col center">
                                         <a href="index.php" style="margin-top: 170%;">ออกจากระบบ</a>
                                     </div>
