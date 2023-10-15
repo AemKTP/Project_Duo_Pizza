@@ -56,15 +56,17 @@ if (isset($_POST['add'])) {
                 $param_sid_price = intval($sid[0]);
                 $param_cid = intval($cid[1]);
                 $param_sid = intval($sid[1]);
+                $cartstatus = 'ยังไม่สั่ง';
+
 
                 $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, pizza.price as pizzaprice, pizza.name as pizzaname
-                                        , crust.name as crustname, size.name as sizename
+                                        , crust.name as crustname, size.name as sizename, cart.status as cart_status
                                 from cart 
                                 INNER JOIN pizza ON cart.pid = pizza.pid
                                 INNER JOIN crust ON cart.cid = crust.cid
                                 INNER JOIN size ON cart.sid = size.sid
-                                where cart.uid = ? and cart.pid = ? and cart.cid = ? and cart.sid = ? ");
-                $stmt2->bind_param('iiii', $uid, $pid, $param_cid, $param_sid);
+                                where cart.uid = ? and cart.pid = ? and cart.cid = ? and cart.sid = ? and cart.status = ?");
+                $stmt2->bind_param('iiiis', $uid, $pid, $param_cid, $param_sid, $cartstatus);
                 $stmt2->execute();
                 $result2 = $stmt2->get_result();
 
@@ -78,7 +80,7 @@ if (isset($_POST['add'])) {
                     $newPrice = $newAmount * (intval($row2['pizzaprice']) + $param_cid_price + $param_sid_price);
                     $cardId = intval($row2['cartid']);
 
-                    $stmt = $conn->prepare("UPDATE cart SET price=?, amount=?, cid=?, sid=? WHERE cartid = ?");
+                    $stmt = $conn->prepare("UPDATE cart SET price = ?, amount = ?, cid = ?, sid = ? WHERE cartid = ?");
                     $stmt->bind_param('iiiii', $newPrice, $newAmount, $param_cid, $param_sid, $cardId);
                     $stmt->execute();
                 }
@@ -89,19 +91,19 @@ if (isset($_POST['add'])) {
                     $newAmount = $quantity;
                     $newPrice = $newAmount * ($pizza_price + $param_cid_price + $param_sid_price); // คำนวณราคารวมใหม่ตามจำนวนชิ้นใหม่
 
-                    
+                    // $address = "address";
+                    $statuspizza = '1';
+
                     // รับเวลาปัจจุบันของเครื่อง
                     date_default_timezone_set('Asia/Bangkok');
                     $current_time = date('Y-m-d H:i:s');
-                    
-                    $address = "address";
-                    $statuspizza = '1';
 
-                    $create_bid = $conn->prepare("INSERT INTO `order` (uid, total_price, adress, fdate, odate, status) VALUES(?, 0, ?, 'null', 'null', ?)");
-                    $create_bid->bind_param("iss", $uid, $address, $statuspizza);
+
+                    $create_bid = $conn->prepare("INSERT INTO `order` (uid, adress, fdate, odate, status) VALUES(?, 'null', 'null', 'null', ?)");
+                    $create_bid->bind_param("is", $uid, $statuspizza);
                     $create_bid->execute();
 
-                    $cheack_stmt = $conn->prepare("SELECT * from `order` where uid = ? ");
+                    $cheack_stmt = $conn->prepare("SELECT * from `order` where uid = ? and round is NULL");
                     $cheack_stmt->bind_param('i', $uid);
                     $cheack_stmt->execute();
                     $resultoid = $cheack_stmt->get_result();
@@ -197,7 +199,7 @@ if (isset($_POST['add'])) {
                         </div>
                         <div class="row" style="display: flex; justify-content: center; align-items: center; ">
 
-                            <?php $row  = $result->fetch_assoc(); ?>
+                            <?php $row = $result->fetch_assoc(); ?>
 
 
                             <div class="row" style="display: flex; justify-content: center; align-items: center; ">
@@ -209,6 +211,7 @@ if (isset($_POST['add'])) {
                                 $result2 = $stmt2->get_result();
 
                                 $allpizza = [];
+                                $statuscart = 'ยังไม่สั่ง';
 
                                 $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, cart.price as pizza_price
                                                             , pizza.name as pizza_name, pizza.image as pizza_image
@@ -217,13 +220,16 @@ if (isset($_POST['add'])) {
                                                             INNER JOIN pizza ON cart.pid  = pizza.pid 
                                                             INNER JOIN crust ON cart.cid = crust.cid
                                                             INNER JOIN size ON cart.sid = size.sid
-                                                            where cart.uid = ?");
-                                $stmt2->bind_param('i', $newuid);
+                                                            where cart.uid = ? and cart.status = ?");
+                                $stmt2->bind_param('is', $newuid, $statuscart);
                                 $stmt2->execute();
                                 $result2 = $stmt2->get_result();
 
 
-                                while ($row2 = $result2->fetch_assoc()) { ?>
+                                while ($row2 = $result2->fetch_assoc()) {
+
+
+                                ?>
 
                                     <div class="row" style="border: 2px solid black; margin-top: 1%;">
 
@@ -231,10 +237,14 @@ if (isset($_POST['add'])) {
                                             <img src="<?= $row2['pizza_image']; ?>" alt="photo" width="200px" height="130px">
                                         </div>
                                         <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                            <h5> <?= $row2['pizza_name']; ?> </h5>
+                                            <h5>
+                                                <?= $row2['pizza_name']; ?>
+                                            </h5>
                                         </div>
                                         <div class="col-2" style="display: flex; justify-content: center; align-items: center;">
-                                            <h6> <?= $row2['crust_name'] . " , " . $row2['size_name'] ?> </h6>
+                                            <h6>
+                                                <?= $row2['crust_name'] . " , " . $row2['size_name'] ?>
+                                            </h6>
                                         </div>
                                         <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
                                             <h5 data-price="<?= $row2['pizza_price']; ?>" id="price<?= $row2['cartid']; ?>">
@@ -265,42 +275,56 @@ if (isset($_POST['add'])) {
                                     </div>
                                 <?php
                                 }
+
                                 ?>
                             </div>
                         </div>
 
                     </div>
                 </div>
-                <form action="">
+                <?php
+                $statuscheckprice = 'ยังไม่สั่ง';
+                $selectstmt = $conn->prepare("select sum(price) as totalprice from cart where uid =? and status = ?");
+                $selectstmt->bind_param("is", $uid, $statuscheckprice);
+                $selectstmt->execute();
+                $resultselectstmt = $selectstmt->get_result();
+                if ($rowselectstmt = $resultselectstmt->fetch_assoc()) {
+
+                ?>
                     <div class="card" style="height: 100px; border-radius: 20px; margin-top: 1%;">
                         <div class="row" style="height: 100%;">
-                            <div class="col-7" style="display: flex; align-items: center; margin-inline-start: 5%;">
-                                <b><h2>ราคารวม</h2></b>
-                            </div>
-                            <div class="col-2" style="display: flex; justify-content: center; align-items: center; margin-right: 0%;">
-                                <?php
-                                $selectstmt=$conn->prepare("select sum(price) as totalprice from cart where uid =?");
-                                $selectstmt->bind_param("i",$uid);
-                                $selectstmt->execute();
-                                $resultselectstmt=$selectstmt->get_result();
-                                while($rowselectstmt->$resultselectstmt->fetch_assoc()){
-                                ?>
-                                <h2>
-                                    <?= number_format($rowselectstmt['totalprice'],0)?>
-                                </h2>
-                                <h2>
-                                       บาท
-                                </h2>
-                            </div>
-                            <div class="col-2" style="display: flex; justify-content: center; align-items: center; margin-right: 1%;">
-                                <button type="button" class="btn btn-success">ยืนยันการสั่งซื้อ</button>
-                            </div>
+                            <?php if ($rowselectstmt['totalprice'] != 0) {
+                            ?>
+                                <div class="col-7" style="display: flex; align-items: center; margin-inline-start: 5%;">
+                                    <b>
+                                        <h2>ราคารวม</h2>
+                                    </b>
+                                </div>
+                                <div class="col-2" style="display: flex; justify-content: center; align-items: center; margin-right: 0%;">
+
+                                    <h2>
+                                        <?= number_format($rowselectstmt['totalprice'], 0) ?>
+                                    </h2>
+                                    <h2>
+                                        บาท
+                                    </h2>
+                                </div>
+                                <div class="col-2" style="display: flex; justify-content: center; align-items: center; margin-right: 1%;">
+                                    <button type="button" class="btn btn-success" onclick="redirectToOrderPage(<?= $uid ?>)">ยืนยันการสั่งซื้อ</button>
+                                </div>
+                            <?php
+                            } else { ?>
+                                <form action="customer.php?uid=<?= $uid?>" method="post" style="display: flex;">
+                                    <div class="col-12" style="display: flex; justify-content: center; align-items: center; margin-right: 1%;">
+                                        <button type="submit" class="btn btn-success">กลับไปเลือกสินค้า</button>
+                                    </div>
+                                </form>
                         </div>
-                        <?php
-                                    }
-                        ?>
+                <?php
+                            }
+                        }
+                ?>
                     </div>
-                </form>
             </div>
         </div>
     </div>
@@ -330,6 +354,12 @@ if (isset($_POST['add'])) {
             });
         });
     });
+</script>
+<script>
+    function redirectToOrderPage(uid) {
+        var url = 'order.php?uid=' + uid;
+        window.location.href = url;
+    }
 </script>
 
 </html>
