@@ -182,7 +182,7 @@ $uid = $_GET['uid'];
                                                     <label for="newAddress">
                                                         <h6><b>New Address:</b></h6>
                                                     </label>
-                                                    <input type="text" id="newAddress" name="newAddress" style="width: 450px; height: 250px;">
+                                                    <input type="text" id="newAddress" name="newAddress" style="width: 450px; height: 250px;" required>
                                                 </div>
                                             </div>
                                             <input type="hidden" name="uid" value="<?= $uid ?>">
