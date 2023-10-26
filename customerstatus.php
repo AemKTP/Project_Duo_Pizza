@@ -120,6 +120,7 @@ ini_set('display_errors', 1);
                                     </div>';
 
                                 if ($row) {
+                                    $totalPrice = 0;
                                     $stmtpizza = $conn->prepare("SELECT pizza.name as pizzaname, crust.name as crustname, size.name as sizename, SUM(cart.price) as price, SUM(cart.amount) as amount
                                                                     FROM cart
                                                                     INNER JOIN pizza ON cart.pid = pizza.pid
@@ -157,14 +158,17 @@ ini_set('display_errors', 1);
                                             if ($statusshow2 == false) {
                                                 echo '  <h6>' . $row['statusorder'] . '</h6> ';
                                             }
-
                                             echo    '</div>
                                             </div>
                                             <div class="col-2">
                                             </div>';
+                                            $totalPrice += $rowpizza['price']+60;
                                             $statusshow2 = true;
                                         }
                                     }
+                                        echo '<div class="col-12" style="text-align: right;">
+                                    <h6><strong>Total Price: ' . $totalPrice . ' THB</strong></h6>
+                                 </div>';
                                 }
                                 echo '</div>
                                 </div>';
