@@ -7,13 +7,6 @@ $stmt = $conn->prepare("select * from user where uid = ?");
 $stmt->bind_param('i', $uid);
 $stmt->execute();
 $result = $stmt->get_result();
-
-// $stmt = $conn->prepare("select * from user where uid = ?");
-// $stmt->bind_param('i', $uid);
-// $stmt->execute();
-// $result = $stmt->get_result();
-
-
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +25,6 @@ $result = $stmt->get_result();
             color: black;
             transition: color 0.3s;
         }
-
         a:hover {
             color: black;
         }
@@ -87,9 +79,21 @@ $result = $stmt->get_result();
                                 <div class="center">
                                     <div class="row">
                                         <div class="col">
-                                            <img src="<?= $row['picture'] ?>" alt="logo" width="150px" height="150px" style=" border-radius: 100%; border: 2px solid black;">
-                                            <h2 class="center" style="margin-block: 5%;"><?= $row['name'] ?></h2>
-                                            <h2 class="center" style="margin-block: 5%;"><?= $row['type'] ?></h2>
+                                            <div class="row">
+                                                <div class="col center" >
+                                                    <img src="<?= $row['picture'] ?>" alt="logo" width="150px" height="150px" style=" border-radius: 100%; border: 2px solid black;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col center" >
+                                                    <h2 class="center" style="margin-block: 5%;"><?= $row['name'] ?></h2>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col center" >
+                                                    <h2 class="center" style="margin-block: 5%;"><?= $row['type'] ?></h2>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

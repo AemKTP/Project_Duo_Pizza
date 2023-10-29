@@ -3,25 +3,6 @@ include "dbconn.php";
 
 $uid = $_GET['uid'];
 
-// echo $uid;
-
-
-
-
-
-// $user_stmt = $conn->prepare("SELECT user.uid as user_uid, user.Address as user_address, user.Address as user_address
-// from user
-// where uid = ?");
-// $user_stmt->bind_param('i', $uid);
-// $user_stmt->execute();
-// $user_result = $user_stmtstmt->get_result();
-
-
-// $create_bid = $conn->prepare("INSERT INTO `order` (uid, total_price, adress, fdate, odate, status) VALUES(?, 0, ?, 'null', 'null', null)");
-// $create_bid->bind_param("is", $uid, $user_address);
-// $create_bid->execute();
-
-
 ?>
 
 
@@ -29,12 +10,13 @@ $uid = $_GET['uid'];
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <title>pizza</title>
 </head>
 <nav>
@@ -57,9 +39,9 @@ $uid = $_GET['uid'];
         border-radius: 12px;
         color: #fff;
         cursor: pointer;
-        font-weight: 700;
-        width: 100px;
-        height: 44px;
+        font-weight: 100;
+        width: 30%;
+        height: 46px;
         line-height: 1em;
         max-width: 100%;
         outline: none;
@@ -107,7 +89,7 @@ $uid = $_GET['uid'];
 </script>
 
 <body>
-    <h1 style="margin-top:34px; text-align: center;">เมนูพิซซ่า</h1>
+    <h2 style="margin-top:34px; text-align: center;">เมนูพิซซ่า</h2>
     <div class="container">
         <div class="row">
             <?php
@@ -116,20 +98,18 @@ $uid = $_GET['uid'];
             $stmt->execute();
             $result = $stmt->get_result();
             while ($row = $result->fetch_assoc()) { ?>
-
                 <div class="col-3" style="margin-bottom:3%;">
-                    <div class="card">
-                        <div class="row">
-                            <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name'] ?></b></h1>
-                            <img src="<?= $row['image'] ?>" alt="pizza-pic" style="width:100%;">
-                            <h4 style="margin-top:20px;text-align:center;"><b>ราคาเริ่มต้น <?= $row['price'] ?></b></h4>
-                            <button type="button" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;" onclick="redirectToShowPage(<?= $uid ?>, <?= $row['pid'] ?>)">
-                                <h2>+เลือก</h2>
-                            </button>
-                            <h5></h5>
-                        </div>
+                    <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <h3 style="margin-top:20px;"><b><?= $row['name'] ?></b></h3>
+                        <img src="<?= $row['image'] ?>" alt="pizza-pic" style="width:100%;">
+                        <h5 style="margin-top:20px;"><b>ราคาเริ่มต้น <?= $row['price'] ?></b></h5>
+
+                        <button type="button" class="btn btn-success" style="margin-bottom:5px;" onclick="redirectToShowPage(<?= $uid ?>, <?= $row['pid'] ?>)">
+                            <h4>+เลือก</h4>
+                        </button>
                     </div>
                 </div>
+
             <?php
             } ?>
         </div>
