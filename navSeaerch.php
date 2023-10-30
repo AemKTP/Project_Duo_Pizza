@@ -110,7 +110,12 @@ $result = $stmt->get_result();
                                 </div>
                                 <div class="row">
                                     <div class="col center">
-                                        <a href="index.php" style="margin-top: 170%;">ออกจากระบบ</a>
+                                        <a href="detailuser.php?uid=<?= $uid ?>" style="margin-top: 10%;">ข้อมูล</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col center">
+                                        <a href="index.php" style="margin-top: 150%;">ออกจากระบบ</a>
                                     </div>
                                 </div>
                             </li>

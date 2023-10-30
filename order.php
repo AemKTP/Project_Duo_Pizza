@@ -8,6 +8,7 @@ $uid = $_GET['uid'];
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/a0b197089f.js" crossorigin="anonymous"></script>
 
 <head>
     <title>order</title>
@@ -158,7 +159,7 @@ $uid = $_GET['uid'];
                             if ($rowOrderAddress['adress'] != 'null') {
                                 $showAddress = $rowOrderAddress['adress'];
                             } else {
-                                $showAddress = 'K.'.$rowUserAddress['name'].''.$rowUserAddress['Address'].' Phone:'.$rowUserAddress['phone'];
+                                $showAddress = 'K.' . $rowUserAddress['name'] . '' . $rowUserAddress['Address'] . ' Phone:' . $rowUserAddress['phone'];
                             }
                             ?>
                             <div id="showAddress" name="showAddress">
@@ -176,7 +177,7 @@ $uid = $_GET['uid'];
                                             <h1 class="modal-title fs-5" id="exampleModalLabel"><b>New Address</b></h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form action="update_order_address.php" method="post">
+                                        <form action="update_order_address.php" method="post" class="change-address">
                                             <div class="modal-body">
                                                 <div class="form-group">
                                                     <label for="name">
@@ -195,7 +196,7 @@ $uid = $_GET['uid'];
                                             </div>
                                             <input type="hidden" name="uid" value="<?= $uid ?>">
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                                                 <button type="submit" class="btn btn-primary" onclick="changeAddress()">Save</button>
                                             </div>
                                         </form>
@@ -255,9 +256,9 @@ $uid = $_GET['uid'];
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="processpaid.php?uid=<?= $uid ?>" method="post">
-                                        <input type="radio" name="pay" value="1" required>เงินสด
-                                        <input type="radio" name="pay" value="2" required>บัตรเครดิต
+                                    <form action="processpaid.php?uid=<?= $uid ?>" method="post" class="buy-it">
+                                        <input type="radio" name="pay" value="1" required><h4><i class="fa-regular fa-money-bill fa-bounce" style="color: #669c35;"> </i> เงินสด</h4>
+                                        <!-- <input type="radio" name="pay" value="2" required>บัตรเครดิต -->
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -273,7 +274,58 @@ $uid = $_GET['uid'];
     </div>
     </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.17/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.17/dist/sweetalert2.min.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buyit = document.querySelectorAll('.buy-it');
 
+            buyit.forEach((form) => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You are buy this order!',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonColor: 'green',
+                        cancelButtonColor: 'red',
+                        confirmButtonText: 'BUY IT!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Submit the form for item deletion
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const Changeaddr = document.querySelectorAll('.change-address');
+
+            Changeaddr.forEach((form) => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You are Change Address!',
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: 'blue',
+                        cancelButtonColor: 'red',
+                        confirmButtonText: 'change it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Submit the form for item deletion
+                        }
+                    });
+                });
+            });
+        });
+    </script>
     <script>
         function changeAddress() {
             var newAddress = document.getElementById("newAddress").value;

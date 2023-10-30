@@ -216,7 +216,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                                         <span class="glyphicon glyphicon-minus"></span>
                                     </button>
                                 </span>
-                                <input class="input" type="text" name="quantity" value="1" min="1" max="500" id="quantity" style="font-size: 20px; " readonly>
+                                <input class="input" type="text" name="quantity" value="1" min="1" max="500" id="quantity" style="font-size: 20px; "  onchange="calculateTotalPrice()" readonly>
                                 <span>
                                     <button type="button" class="btn1 btn-success btn-number" data-type="plus" data-field="quantity">
                                         <span class="glyphicon glyphicon-plus"></span>
@@ -226,7 +226,7 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
                             <br><br>
 
                             <h1 style="margin-top:20px; margin-left:15rem;"><b><span id="totalPrice"><?= number_format($row['pizza_price'], 2) ?>
-                                    </span>บาท</b></h1>
+                                    </span> บาท</b></h1>
 
                             <!-- Add hidden input fields to send data -->
                             <input type="hidden" name="add" value="1">
@@ -286,27 +286,27 @@ $pid = isset($_GET['pid']) ? $_GET['pid'] : null;
         });
     </script>
 
-    <script>
-        function calculateTotalPrice() {
+<script>
+    function calculateTotalPrice() {
+        var pizzaPrice = parseFloat(<?= $row['pizza_price'] ?>);
 
-            var splitStringSize = document.getElementById("size").value.split(",");
-            var priceSize = splitStringSize[0];
+        var splitStringSize = document.getElementById("size").value.split(",");
+        var priceSize = parseFloat(splitStringSize[0]);
 
-            var splitStringCrust = document.getElementById("crust").value.split(",");
-            var priceCrust = splitStringCrust[0];
+        var splitStringCrust = document.getElementById("crust").value.split(",");
+        var priceCrust = parseFloat(splitStringCrust[0]);
 
-            // var selectedCrustPrice = parseFloat(document.getElementById("size").value);
-            var selectedSizePrice = parseFloat(priceSize);
-            var selectedCrustPrice = parseFloat(priceCrust);
+        var quantity = parseInt(document.getElementById("quantity").value);
+        var totalPrice = (pizzaPrice + priceSize + priceCrust) * quantity;
 
-            var pizzaPrice = parseFloat(<?= $row['pizza_price'] ?>);
+        document.getElementById("totalPrice").innerText = totalPrice.toFixed(2);
+    }
 
-            var totalPrice = pizzaPrice + selectedSizePrice + selectedCrustPrice;
+    calculateTotalPrice();
 
-            document.getElementById("total_price").value = totalPrice.toFixed(2);
+    document.getElementById("size").addEventListener("change", calculateTotalPrice);
+    document.getElementById("crust").addEventListener("change", calculateTotalPrice);
+    document.getElementById("quantity").addEventListener("change", calculateTotalPrice);
+</script>
 
-            document.getElementById("totalPrice").innerText = totalPrice.toFixed(2);
-        }
-        calculateTotalPrice();
-    </script>
 </body>
