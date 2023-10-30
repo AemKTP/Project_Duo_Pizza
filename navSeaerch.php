@@ -19,6 +19,8 @@ $result = $stmt->get_result();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         a {
             text-decoration: none;
@@ -60,11 +62,18 @@ $result = $stmt->get_result();
                             </li>
                             </a>
                             </li>
-                            <li style="margin-left: 50%;">
+                            <li style="margin-left: 20%; display:flex; align-items: center;">
+                                <form action="search.php?uid=<?= $uid ?>" method="GET" style="display: flex;">
+                                    <input type="hidden" name="uid" id="uid" value="<?= $uid ?>">
+                                    <input type="text" name="search" id="search" placeholder="ค้นหาชื่อสินค้า" style="border-radius: 50px; background-color: lightgray; margin-right: 3%;">
+                                    <button type="submit" class="btn-search">
+                                        <i class="fa fa-search"></i>
 
+                                    </button>
+                                </form>
                             </li>
-                            
-                            <li style="margin-left: auto;">
+
+                            <li style="margin-left: 16%;">
                                 <a href="cart.php?uid=<?= $uid ?>" style="display: flex; align-items: center;">
                                     <img src="shoppingcart.png" alt="shoppingcart" style="margin-top: 10%; margin-left: 10%;" width="70px" height="70px">
                                 </a>

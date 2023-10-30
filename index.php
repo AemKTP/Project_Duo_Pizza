@@ -5,12 +5,13 @@ include "dbconn.php";
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <title>pizza</title>
 </head>
 <nav>
@@ -32,10 +33,20 @@ include "dbconn.php";
     .btn {
         border-radius: 12px;
         color: #fff;
-        cursor: pointer;
-        font-weight: 700;
-        width: 100px;
+        width: auto;
         height: 44px;
+        display: flex;
+        text-align: center;
+        align-items: center;
+    }
+    .btn-search {
+        border-radius: 100%;
+        color: #fff;
+        background-color: cornflowerblue;
+        cursor: pointer;
+        font-weight: 100;
+        width: 15%;
+        height: 30%;
         line-height: 1em;
         max-width: 100%;
         outline: none;
@@ -83,7 +94,7 @@ include "dbconn.php";
 </script>
 
 <body>
-    <h1 style="margin-top:34px; text-align: center;">เมนูพิซซ่า</h1>
+    <h2 style="margin-top:34px; text-align: center;">เมนูพิซซ่า</h2>
     <div class="container">
         <div class="row">
             <?php
@@ -97,19 +108,25 @@ include "dbconn.php";
                 <div class="col-3" style="margin-bottom:3%;">
                     <div class="card">
                         <div class="row">
-                            <h1 style="margin-top:20px;text-align:center;"><b><?= $row['name'] ?></b></h1>
+
+                            <h3 style="margin-top:20px;text-align:center;"><b><?= $row['name'] ?></b></h3>
                             <img src="<?= $row['image'] ?>" alt="pizza-pic" style="width:100%;">
-                            <h4 style="margin-top:20px;text-align:center;"><b>*ราคาเริ่มต้น <?= $row['price'] ?></b></h4>
-                            <form action="login.php">
-                                <button type="submit" class="btn btn-warning" style="margin-left:12rem; margin-bottom:5px;">
-                                    <h2>Login</h2>
-                                </button>
-                            </form>
-                            <form action="register.php">
-                                <button type="submit" class="btn btn-success" style="margin-left:12rem; margin-bottom:5px;">
-                                    <h2>Register</h2>
-                                </button>
-                            </form>
+                            <h5 style="margin-top:20px;text-align:center;"><b>*ราคาเริ่มต้น <?= $row['price'] ?></b></h5>
+
+                            <div class="d-flex justify-content-center align-items-center">
+                                <form action="login.php">
+                                    <button type="submit" class="btn btn-warning" style="margin-bottom: 5px;">
+                                        <h3>Login</h3>
+                                    </button>
+                                </form>
+                                <form action="register.php">
+                                    <button type="submit" class="btn btn-success" style="margin-left: 1rem; margin-bottom: 5px;">
+                                        <h3>Register</h3>
+                                    </button>
+                                </form>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>

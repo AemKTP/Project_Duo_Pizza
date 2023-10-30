@@ -130,7 +130,7 @@ $pizza_result = $pizza_stmt->get_result();
                                             <h1 style="text-decoration: underline; ">ข้อมูลพิซซ่า</h1>
                                         </div>
 
-                                        <div class="row">
+                                        <!-- <div class="row">
                                             <div class="col-3" style="display: flex; justify-content: center;">
                                                 <h3>Picture</h3>
                                             </div>
@@ -146,7 +146,7 @@ $pizza_result = $pizza_stmt->get_result();
                                             <div class="col-2" style="display: flex; justify-content: center;">
                                                 <h3>ราคา</h3>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <?php
                                         while ($pizzarow = $pizza_result->fetch_assoc()) { 
                                             if($pizzarow['cart_status'] == 'สั่งแล้ว'){

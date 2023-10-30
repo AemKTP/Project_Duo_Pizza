@@ -177,7 +177,7 @@ if (isset($_POST['add'])) {
                             <h1 style="text-decoration: underline;">รายการสั่งซื้อของท่าน</h1>
                         </div>
 
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-2" style="display: flex; justify-content: center;">
                                 <h3>Picture</h3>
                             </div>
@@ -196,7 +196,7 @@ if (isset($_POST['add'])) {
                             <div class="col-1" style="display: flex; justify-content: center;">
                                 <h3>Delete</h3>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row" style="display: flex; justify-content: center; align-items: center; ">
 
                             <?php $row = $result->fetch_assoc(); ?>

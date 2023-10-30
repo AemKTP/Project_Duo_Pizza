@@ -1,8 +1,8 @@
 <?php
-include "dbconn.php";
+include 'dbconn.php';
 
-$uid = $_GET['uid'];
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 ?>
 
 
@@ -21,7 +21,7 @@ $uid = $_GET['uid'];
 </head>
 <nav>
     <?php
-    include "navSeaerch.php";
+    include "nav_index.php";
     ?>
 </nav>
 <style>
@@ -34,6 +34,7 @@ $uid = $_GET['uid'];
         height: auto;
         border-radius: 20px;
     }
+
 
     .btn {
         border-radius: 12px;
@@ -69,7 +70,6 @@ $uid = $_GET['uid'];
 </style>
 
 
-<!-- <article> -->
 <header>
 
     <body style="height: 100%; min-height: 100vh;">
@@ -87,14 +87,6 @@ $uid = $_GET['uid'];
                         <img src="https://cdn.1112.com/1112/public/images/banners/Sep23/BOGO_Coke_swensens_1440_TH.jpg" class="w-100 d-block" alt="Second slide">
                     </div>
                 </div>
-                <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button> -->
             </div>
         </div>
         <div>
@@ -110,32 +102,56 @@ $uid = $_GET['uid'];
     <div class="container">
         <div class="row">
             <?php
-            $stmt = $conn->prepare("SELECT *
-                                    from pizza");
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) { ?>
-                <div class="col-3" style="margin-bottom:3%;">
-                    <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <h3 style="margin-top:20px;"><b><?= $row['name'] ?></b></h3>
-                        <img src="<?= $row['image'] ?>" alt="pizza-pic" style="width:100%;">
-                        <h5 style="margin-top:20px;"><b>ราคาเริ่มต้น <?= $row['price'] ?></b></h5>
+            if (isset($_GET['search'])) {
+                $search = '%' . $_GET['search'] . '%';
 
-                        <button type="button" class="btn btn-success" style="margin-bottom:5px;" onclick="redirectToShowPage(<?= $uid ?>, <?= $row['pid'] ?>)">
-                            <h4 style="margin-bottom:5px;"></h4>+เลือก</h4>
-                        </button>
-                    </div>
-                </div>
+                $stmt = $conn->prepare("SELECT * FROM pizza WHERE name LIKE ?");
+                $stmt->bind_param("s", $search);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
+                if ($result->num_rows === 0) {
+            ?>
+                    <h1 style="display: flex; align-items:center; justify-content:center;">ไม่พบสินค้าที่ค้นหา</h1>
+                    <?php
+                } else {
+                    while ($row = $result->fetch_assoc()) {
+                    ?>
+                        <div class="col-3" style="margin-bottom:3%;">
+                            <div class="card">
+                                <div class="row">
+
+                                    <h3 style="margin-top:20px;text-align:center;"><b><?= $row['name'] ?></b></h3>
+                                    <img src="<?= $row['image'] ?>" alt="pizza-pic" style="width:100%;">
+                                    <h5 style="margin-top:20px;text-align:center;"><b>*ราคาเริ่มต้น <?= $row['price'] ?></b></h5>
+
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <form action="login.php">
+                                            <button type="submit" class="btn btn-warning" style="margin-bottom: 5px;">
+                                                <h3>Login</h3>
+                                            </button>
+                                        </form>
+                                        <form action="register.php">
+                                            <button type="submit" class="btn btn-success" style="margin-left: 1rem; margin-bottom: 5px;">
+                                                <h3>Register</h3>
+                                            </button>
+                                        </form>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
             <?php
-            } ?>
+                    }
+                }
+            }
+
+            ?>
         </div>
+
     </div>
-    <script>
-        function redirectToShowPage(uid, pid) {
-            window.location.href = 'show.php?uid=' + uid + '&pid=' + pid; // ใช้ & แทน ? ในการระบุพารามิเตอร์เพิ่มเติม
-        }
-    </script>
+
 </body>
 
 </html>

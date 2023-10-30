@@ -1,31 +1,28 @@
 <?php
 include 'dbconn.php';
 
-$uid = $_GET['uid'];
-// echo $uid;
-$stmt = $conn->prepare("select * from user where uid = ?");
-$stmt->bind_param('i', $uid);
-$stmt->execute();
-$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NavIndex</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Nav_index</title>
     <style>
         a {
             text-decoration: none;
             color: black;
             transition: color 0.3s;
         }
-        a:hover{
+
+        a:hover {
             color: black;
         }
 
@@ -59,11 +56,17 @@ $result = $stmt->get_result();
                             </li>
                             </a>
                             </li>
-                            <li style="margin-left: 20%;">
-                                <input type="search" name="search" placeholder="Search" style=" border-radius: 50px; background-color: lightgray;">
+                            <li style="margin-left: 20%; display:flex; align-items: center;">
+                                <form action="search_index.php" method="GET" style="display: flex;">
+                                <input type="text" name="search" id="search" placeholder="ค้นหาชื่อสินค้า" style="border-radius: 50px; background-color: lightgray; margin-right: 3%;">
+                                    <button type="submit" class="btn-search">
+                                    <i class="fa fa-search"></i>
+
+                                    </button>
+                                </form>
                             </li>
                             <li style="margin-left: auto;">
-                                <a href="" style="display: flex; align-items: center;">
+                                <a href="index.php" style="display: flex; align-items: center;">
                                     <img src="shoppingcart.png" alt="shoppingcart" style="margin-top: 10%;" width="70px" height="70px">
                             <li id="mySidenav" class="sidenav" >
                                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>

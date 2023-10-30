@@ -143,7 +143,7 @@ $uid = $_GET['uid'];
                             <?php
                             error_reporting(E_ALL);
                             ini_set('display_errors', 1);
-                            $selectUserAddress = $conn->prepare("SELECT Address FROM user WHERE uid = ?");
+                            $selectUserAddress = $conn->prepare("SELECT name,Address,phone FROM user WHERE uid = ?");
                             $selectUserAddress->bind_param("i", $uid);
                             $selectUserAddress->execute();
                             $resultUserAddress = $selectUserAddress->get_result();
@@ -158,7 +158,7 @@ $uid = $_GET['uid'];
                             if ($rowOrderAddress['adress'] != 'null') {
                                 $showAddress = $rowOrderAddress['adress'];
                             } else {
-                                $showAddress = $rowUserAddress['Address'];
+                                $showAddress = 'K.'.$rowUserAddress['name'].''.$rowUserAddress['Address'].' Phone:'.$rowUserAddress['phone'];
                             }
                             ?>
                             <div id="showAddress" name="showAddress">
@@ -179,10 +179,18 @@ $uid = $_GET['uid'];
                                         <form action="update_order_address.php" method="post">
                                             <div class="modal-body">
                                                 <div class="form-group">
-                                                    <label for="newAddress">
-                                                        <h6><b>New Address:</b></h6>
+                                                    <label for="name">
+                                                        <h6><b>Name:</b></h6>
                                                     </label>
-                                                    <input type="text" id="newAddress" name="newAddress" style="width: 450px; height: 250px;" required>
+                                                    <input type="text" id="name" name="name" style="width: 450px; height: 50px;" required>
+                                                    <label for="newAddress">
+                                                        <h6><b>newAddress:</b></h6>
+                                                    </label>
+                                                    <input type="text" id="newAddress" name="newAddress" style="width: 450px; height: 150px;" required>
+                                                    <label for="phone">
+                                                        <h6><b>phone:</b></h6>
+                                                    </label>
+                                                    <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" style="border-radius: 50px; width: 100%;" required>
                                                 </div>
                                             </div>
                                             <input type="hidden" name="uid" value="<?= $uid ?>">
@@ -269,7 +277,11 @@ $uid = $_GET['uid'];
     <script>
         function changeAddress() {
             var newAddress = document.getElementById("newAddress").value;
+            var newAddress = document.getElementById("phone").value;
+            var newAddress = document.getElementById("name").value;
             document.getElementById("showAddress").innerText = newAddress;
+            document.getElementById("name").innerText = newAddress;
+            document.getElementById("phone").innerText = newAddress;
         }
     </script>
 </body>
