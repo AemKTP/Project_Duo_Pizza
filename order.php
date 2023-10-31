@@ -1,6 +1,7 @@
 <?php
 include "dbconn.php";
 $uid = $_GET['uid'];
+$new_address = $_POST['new_address'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -156,14 +157,23 @@ $uid = $_GET['uid'];
                             $resultOrderAddress = $selectOrderAddress->get_result();
                             $rowOrderAddress = $resultOrderAddress->fetch_assoc();
 
-                            if ($rowOrderAddress['adress'] != 'null') {
-                                $showAddress = $rowOrderAddress['adress'];
+                            if (empty($new_address)) {
+                                // ถ้า $new_address ว่าง
+                                $showAddress = $rowUserAddress['name'] . ', ' . $rowUserAddress['Address'] . ', Phone:' . $rowUserAddress['phone'];
                             } else {
-                                $showAddress = 'K.' . $rowUserAddress['name'] . '' . $rowUserAddress['Address'] . ' Phone:' . $rowUserAddress['phone'];
+                                // ถ้า $new_address ไม่ว่าง (มีค่า)
+                                $showAddress = $rowOrderAddress['adress'];
                             }
+
+
+
                             ?>
                             <div id="showAddress" name="showAddress">
-                                <?= $showAddress; ?>
+
+                                <?php
+                                // echo  $showAddress = $rowOrderAddress['adress'];
+                                echo $showAddress;
+                                ?>
                             </div>
 
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -195,6 +205,7 @@ $uid = $_GET['uid'];
                                                 </div>
                                             </div>
                                             <input type="hidden" name="uid" value="<?= $uid ?>">
+                                            <input type="hidden" name="uid" value="<?= $uid ?>">
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                                                 <button type="submit" class="btn btn-primary" onclick="changeAddress()">Save</button>
@@ -213,7 +224,7 @@ $uid = $_GET['uid'];
                 $stmtselect->bind_param("is", $uid, $status);
                 $stmtselect->execute();
                 $resultstmtselect = $stmtselect->get_result();
-                $delivery = 60;
+                $delivery = 15;
                 if ($rowrssl = $resultstmtselect->fetch_assoc()) {
                 ?>
                     <div class="card" style="margin-top:5%;height:30%;">
@@ -257,7 +268,8 @@ $uid = $_GET['uid'];
                                 </div>
                                 <div class="modal-body">
                                     <form action="processpaid.php?uid=<?= $uid ?>" method="post" class="buy-it">
-                                        <input type="radio" name="pay" value="1" required><h4><i class="fa-regular fa-money-bill fa-bounce" style="color: #669c35;"> </i> เงินสด</h4>
+                                        <input type="radio" name="pay" value="1" required>
+                                        <h4><i class="fa-regular fa-money-bill fa-bounce" style="color: #669c35;"> </i> เงินสด</h4>
                                         <!-- <input type="radio" name="pay" value="2" required>บัตรเครดิต -->
                                 </div>
                                 <div class="modal-footer">
@@ -301,7 +313,7 @@ $uid = $_GET['uid'];
             });
         });
     </script>
-     <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const Changeaddr = document.querySelectorAll('.change-address');
 

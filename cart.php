@@ -213,19 +213,21 @@ if (isset($_POST['add'])) {
                                 $allpizza = [];
                                 $statuscart = 'ยังไม่สั่ง';
 
-                                $stmt2 = $conn->prepare("Select cart.cartid as cartid, cart.amount as cartamount, cart.price as pizza_price
-                                                            , pizza.name as pizza_name, pizza.image as pizza_image
-                                                            , crust.name as crust_name, size.name as size_name
-                                                            from cart 
-                                                            INNER JOIN pizza ON cart.pid  = pizza.pid 
-                                                            INNER JOIN crust ON cart.cid = crust.cid
-                                                            INNER JOIN size ON cart.sid = size.sid
-                                                            where cart.uid = ? and cart.status = ?");
+                                $stmt2 = $conn->prepare("SELECT cart.cartid as cartid, cart.amount as cartamount, cart.price as pizza_price
+                                                        , pizza.name as pizza_name, pizza.image as pizza_image
+                                                        , crust.name as crust_name, size.name as size_name
+                                                        FROM cart 
+                                                        INNER JOIN pizza ON cart.pid  = pizza.pid 
+                                                        INNER JOIN crust ON cart.cid = crust.cid
+                                                        INNER JOIN size ON cart.sid = size.sid
+                                                        WHERE cart.uid = ? AND cart.status = ?
+                                                        ORDER BY pizza_name, size_name DESC");
+
                                 $stmt2->bind_param('is', $newuid, $statuscart);
                                 $stmt2->execute();
                                 $result2 = $stmt2->get_result();
 
-
+                                $count = 1;
                                 while ($row2 = $result2->fetch_assoc()) {
 
 
@@ -233,6 +235,9 @@ if (isset($_POST['add'])) {
 
                                     <div class="row" style="border: 2px solid black; margin-top: 1%;">
 
+                                        <div class="col-1" style="display: flex; justify-content: center; align-items: center;">
+                                            <h2><?= $count ?></h2>
+                                        </div>
                                         <div class="col-2" style="display: flex; justify-content: center; ">
                                             <img src="<?= $row2['pizza_image']; ?>" alt="photo" width="200px" height="130px">
                                         </div>
@@ -274,6 +279,7 @@ if (isset($_POST['add'])) {
                                         </div>
                                     </div>
                                 <?php
+                                    $count++;
                                 }
 
                                 ?>
@@ -295,9 +301,19 @@ if (isset($_POST['add'])) {
                         <div class="row" style="height: 100%;">
                             <?php if ($rowselectstmt['totalprice'] != 0) {
                             ?>
-                                <div class="col-7" style="display: flex; align-items: center; margin-inline-start: 5%;">
+                                <div class="col-2" style="display: flex; align-items: center; margin-inline-start: 5%;">
                                     <b>
-                                        <h2>ราคารวม</h2>
+                                        <h4>จำนวนสินค้าทั้งหมด</h4>
+                                    </b>
+                                </div>
+                                <div class="col-2" style="display: flex; align-items: center; margin-inline-start: 5%;">
+                                    <b>
+                                        <h2><?= $count-1?> รายการ</h2>
+                                    </b>
+                                </div>
+                                <div class="col-2" style="display: flex; align-items: center; margin-inline-start: 5%;">
+                                    <b>
+                                        <h4>ราคารวม</h4>
                                     </b>
                                 </div>
                                 <div class="col-2" style="display: flex; justify-content: center; align-items: center; margin-right: 0%;">
@@ -314,7 +330,7 @@ if (isset($_POST['add'])) {
                                 </div>
                             <?php
                             } else { ?>
-                                <form action="customer.php?uid=<?= $uid?>" method="post" style="display: flex;">
+                                <form action="customer.php?uid=<?= $uid ?>" method="post" style="display: flex;">
                                     <div class="col-12" style="display: flex; justify-content: center; align-items: center; margin-right: 1%;">
                                         <button type="submit" class="btn btn-success">กลับไปเลือกสินค้า</button>
                                     </div>

@@ -89,11 +89,13 @@ ini_set('display_errors', 1);
         ini_set('display_errors', 1);
 
 
-        $pizza_stmt = $conn->prepare("SELECT distinct `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date
+        $pizza_stmt = $conn->prepare("SELECT distinct `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date, `order`.status as order_status
                                 FROM `order`
+                                ORDER BY order_status ASC, order_date DESC
                                 ");
         $pizza_stmt->execute();
         $pizza_result = $pizza_stmt->get_result();
+
 
     ?>
 
@@ -138,16 +140,17 @@ ini_set('display_errors', 1);
 
                                     if ($row_pizza['order_date'] != 'null') {
 
-                                        $pizza_stmt_check = $conn->prepare("SELECT distinct`order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date, `order`.fdate as final_date, `order`.status as order_status
-                                                                        , sum(cart.price) as cart_price
-                                                                        FROM `order`
-                                                                        INNER JOIN cart ON cart.oid = `order`.oid
-                                                                        where `order`.round = ? and `order`.uid = ? and `order`.odate = ?
-                                                                        group by order_round, order_uid, order_date, final_date,order_status
-                                                                        ");
+                                        $pizza_stmt_check = $conn->prepare("SELECT distinct `order`.round as order_round, `order`.uid as order_uid, `order`.odate as order_date, `order`.fdate as final_date, `order`.status as order_status
+                                                                            , sum(cart.price) as cart_price
+                                                                            FROM `order`
+                                                                            INNER JOIN cart ON cart.oid = `order`.oid
+                                                                            WHERE `order`.round = ? AND `order`.uid = ? AND `order`.odate = ?
+                                                                            GROUP BY order_round, order_uid, order_date, final_date, order_status
+                                                                            ");
                                         $pizza_stmt_check->bind_param('iis', $row_pizza['order_round'], $row_pizza['order_uid'], $row_pizza['order_date']);
                                         $pizza_stmt_check->execute();
                                         $pizza_result_check = $pizza_stmt_check->get_result();
+
 
                                         while ($row_pizza_check = $pizza_result_check->fetch_assoc()) {
                                             $statusList = array(
@@ -187,7 +190,7 @@ ini_set('display_errors', 1);
                                                     </div>
                                                     <div class="col-2">
                                                         <div>
-                                                            <h6>Total_Price : <?= $row_pizza_check['cart_price']+60 ?></h6>
+                                                            <h6>Total_Price : <?= $row_pizza_check['cart_price'] + 15 ?></h6>
                                                         </div>
                                                     </div>
                                                     <div class="col-2">
@@ -234,8 +237,7 @@ ini_set('display_errors', 1);
                                         }
                                     }
                                 }
-                            }
-                            else {
+                            } else {
                                 echo '<script>window.location.href = "login.php";</script>';
                             }
                             ?>

@@ -96,12 +96,13 @@ ini_set('display_errors', 1);
                         <div class="row" style="display: flex; justify-content: center; align-items: center; ">
                             <?php
                             $statusshow = "สั่งแล้ว";
-                            $stmt = $conn->prepare("SELECT round, cart.oid as orderid ,odate, `order`.status as statusorder
+                            $stmt = $conn->prepare("SELECT round, cart.oid as orderid ,odate, `order`.status as statusorder, adress as adress, `order`.fdate as fdate
                                                     FROM `order`
                                                     INNER JOIN cart ON `order`.oid = cart.oid
                                                     WHERE `order`.uid = ?
                                                     AND    cart.status = ?
-                                                    GROUP BY round,odate,orderid,statusorder");
+                                                    GROUP BY round,odate,orderid,statusorder
+                                                    Order by fdate ASC");
                             $stmt->bind_param("is", $uid, $statusshow);
                             $stmt->execute();
                             $result = $stmt->get_result();
@@ -112,17 +113,27 @@ ini_set('display_errors', 1);
                                     echo '<div class="row" style="border-bottom: 2px solid tomato; margin-top: 1%; height: auto;">';
                                 }
                                 $counter++;
-
-                                echo '<div class="row" style="margin-left: 2%; margin-right: 2%; align-items: center;">
-                                    <div class="col-2">
+                            ?>
+                                <div class="row" style="display: flex; margin-left: 2%; margin-right: 2%; align-items: center;">
+                                    <div class="col-2" >
                                         <div>
-                                            <h6>Order: ' . $row['round'] . ',<br>Date: ' . $row['odate'] . '</h6>
+                                            <h6><?= $row['adress']?></h6>
                                         </div>
-                                    </div>';
+                                    </div>
 
+
+
+                                <?php
+                                // echo '<div class="row" style="margin-left: 2%; margin-right: 2%; align-items: center;">
+                                //         <div class="col-2">
+                                //             <div>
+                                //                 <h6>Order: ' . $row['round'] . ',<br>Date: ' . $row['odate'] . '</h6>
+                                //             </div>
+                                //         </div>';
                                 if ($row) {
-                                    $totalPrice = 60;
-                                    $stmtpizza = $conn->prepare("SELECT pizza.name as pizzaname, crust.name as crustname, size.name as sizename, SUM(cart.price) as price, SUM(cart.amount) as amount
+                                    $totalPrice = 15;
+                                    $stmtpizza = $conn->prepare("SELECT pizza.name as pizzaname, pizza.price as pizzaprice
+                                                                    , crust.name as crustname, size.name as sizename, SUM(cart.price) as price, SUM(cart.amount) as amount
                                                                     FROM cart
                                                                     INNER JOIN pizza ON cart.pid = pizza.pid
                                                                     INNER JOIN size ON cart.sid = size.sid
@@ -130,7 +141,7 @@ ini_set('display_errors', 1);
                                                                     WHERE cart.uid = ?
                                                                     AND cart.oid = ?
                                                                     AND cart.status = ?
-                                                                    group by pizzaname,crustname,sizename");
+                                                                    group by pizzaname, crustname, sizename, pizzaprice");
                                     $stmtpizza->bind_param("iis", $uid, $row['orderid'], $statusshow);
                                     $stmtpizza->execute();
                                     $resultpizza = $stmtpizza->get_result();
@@ -146,7 +157,7 @@ ini_set('display_errors', 1);
                                             </div>
                                             <div class="col-2">
                                                 <div>
-                                                    <h6>' . $rowpizza['amount'] . ' ชิ้น</h6>
+                                                    <h6>' . $rowpizza['amount'] . ' ชิ้น , '.$rowpizza['pizzaprice'] .'</h6>
                                                 </div>
                                             </div>
                                             <div class="col-2">
@@ -157,7 +168,25 @@ ini_set('display_errors', 1);
                                             <div class="col-2">
                                                 <div>';
                                             if ($statusshow2 == false) {
-                                                echo '  <h6>' . $row['statusorder'] . '</h6> ';
+                                                // echo '  <h6>' . $row['statusorder'] . '</h6> ';
+
+                                                if($row['statusorder'] == 'กำลังเตรียมออเดอร์'){
+                                                    ?>
+                                                        <h5 style="color: blue;"><?= $row['statusorder']?></h5>
+                                                    <?php
+                                                }
+                                                else if($row['statusorder'] == 'ส่งแล้ว'){
+                                                    ?>
+                                                        <h5 style="color: green;"><?= $row['statusorder']?></h5>
+                                                        <h5 style="color: black;"><?= $row['fdate']?></h5>
+                                                    <?php
+                                                }
+                                                else {
+                                                    ?>
+                                                        <h5 style="color: black;"><?= $row['statusorder']?></h5>
+                                                    <?php
+                                                }
+
                                             }
                                             echo    '</div>
                                             </div>
@@ -167,19 +196,19 @@ ini_set('display_errors', 1);
                                             $statusshow2 = true;
                                         }
                                     }
-                                        echo '<div class="col-12" style="text-align: right;">
+                                    echo '<div class="col-12" style="text-align: right;">
                                         <i class="fa-regular fa-money-bill" style="color: #77bb41;"><h6><strong>Total Price: ' . $totalPrice . ' THB</strong></h6></i></div>';
                                 }
                                 echo '</div>
                                 </div>';
                             }
-                            ?>
+                                ?>
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </body>
 
 </html>

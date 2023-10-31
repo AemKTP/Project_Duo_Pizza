@@ -88,7 +88,7 @@ $result = $stmt->get_result();
                                             </div>
                                             <div class="row">
                                                 <div class="col center">
-                                                    <h2 class="center" style="margin-block: 5%;"><?= $row['name'] ?></h2>
+                                                    <h2 class="center" style="margin-block: 5%;"><?= $row['name']?></h2>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -96,17 +96,22 @@ $result = $stmt->get_result();
                                                     <h2 class="center" style="margin-block: 5%;"><?= $row['type'] ?></h2>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col center">
+                                                    <h2 class="center" style="margin-block: 5%;">User[ <?= $uid?> ]</h2>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col center">
-                                        <a href="detailuser.php?uid=<?= $uid?>" style="margin-top: 10%;">ข้อมูล</a>
+                                        <a href="detailuser.php?uid=<?= $uid ?>" style="margin-top: 10%;">ข้อมูล</a>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col center">
-                                        <a href="index.php" style="margin-top: 150%;">ออกจากระบบ</a>
+                                        <a href="index.php" style="margin-top: 100%;">ออกจากระบบ</a>
                                     </div>
                                 </div>
                             </li>
